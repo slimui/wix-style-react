@@ -1,12 +1,45 @@
 import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
-import ReactDayPicker from 'react-day-picker';
+import ReactDayPicker, { LocaleUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
 import classnames from 'classnames';
 import css from './DatePicker.scss';
 import format from 'date-fns/format';
+import en from 'date-fns/locale/en';
+import es from 'date-fns/locale/es';
+import pt from 'date-fns/locale/pt';
+import fr from 'date-fns/locale/fr';
+import de from 'date-fns/locale/de';
+import pl from 'date-fns/locale/pl';
+import it from 'date-fns/locale/it';
+import ru from 'date-fns/locale/ru';
+import ja from 'date-fns/locale/ja';
+import ko from 'date-fns/locale/ko';
+import tr from 'date-fns/locale/tr';
+import sv from 'date-fns/locale/sv';
+import nb from 'date-fns/locale/nb';
+import nl from 'date-fns/locale/nl';
+import da from 'date-fns/locale/da';
+
+const locales = {
+  en,
+  es,
+  pt,
+  fr,
+  de,
+  pl,
+  it,
+  ru,
+  ja,
+  ko,
+  tr,
+  sv,
+  no: nb,
+  nl,
+  da
+};
 
 /**
   * DatePicker component
@@ -145,12 +178,22 @@ export default class DatePicker extends WixComponent {
       cssClasses.push({'react-datepicker--hide-header__dropdown': true});
     }
     
+    const localeUtils = {
+      ...LocaleUtils, 
+      formatMonthTitle: 
+        date => console.log('cat', date) || format(date, 'MMMM YYYY', {
+          locale: locales[locale]
+        }),
+    };
+    
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDay: this.props.value,
       filterDate: this.filterDate,
       readOnly: this.props.readOnly,
-      showYearDropdown: this.props.showYearDropdown
+      showYearDropdown: this.props.showYearDropdown,
+      locale: locale,
+      localeUtils: localeUtils,
     };
     
     const inputProps = {
@@ -175,9 +218,8 @@ export default class DatePicker extends WixComponent {
                       onDayChange={day => console.log(day)}
                       placeholder={placeholderText}
                       format={dateFormat}
-                      locale={locale}
                       formatDate={(date, dateFormat, locale) => format(date, dateFormat, {
-                        locale
+                        locale: locales[locale]
                       })} />
       </div>
     );
