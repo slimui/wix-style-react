@@ -1,7 +1,7 @@
 import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
-import ReactDatepicker from 'react-datepicker';
+import ReactDayPicker from 'react-day-picker';
 import DatePickerInput from './DatePickerInput';
 import moment from 'moment';
 import classnames from 'classnames';
@@ -164,7 +164,7 @@ export default class DatePicker extends WixComponent {
     }
     return (
       <div className={classnames(cssClasses)}>
-        <ReactDatepicker
+        <ReactDayPicker
           {...this.props}
           ref={calendar => this.calendar = calendar}
           selected={this.props.value}
