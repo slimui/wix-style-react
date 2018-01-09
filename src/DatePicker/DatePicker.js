@@ -2,6 +2,7 @@ import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
 import ReactDayPicker from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
 import classnames from 'classnames';
 import css from './DatePicker.scss';
@@ -119,30 +120,6 @@ export default class DatePicker extends WixComponent {
     return this.props.filterDate(date);
   }
 
-  renderInput() {
-    const {
-      rtl, style, theme, prefix, inputDataHook: dataHook, onEnterPressed,
-      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius
-    } = this.props;
-
-    return (
-      <DatePickerInput
-        {...{
-          rtl,
-          style,
-          theme,
-          prefix,
-          dataHook,
-          onEnterPressed,
-          error,
-          errorMessage,
-          customInput,
-          noLeftBorderRadius,
-          noRightBorderRadius
-        }}
-        />
-    );
-  }
 
   /** open the calendar */
   open() {
@@ -155,23 +132,45 @@ export default class DatePicker extends WixComponent {
   }
 
   render() {
+    const {
+      rtl, style, theme, prefix, inputDataHook: dataHook, onEnterPressed,
+      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius
+    } = this.props;
     const cssClasses = [css.wrapper, this.props.noLeftBorderRadius, this.props.noRightBorderRadius];
     if (this.props.showYearDropdown || this.props.showMonthDropdown) {
       cssClasses.push({'react-datepicker--hide-header': true});
     } else {
       cssClasses.push({'react-datepicker--hide-header__dropdown': true});
     }
+    
+    const dayPickerProps = {
+      ref: calendar => this.calendar = calendar,
+      selectedDay: this.props.value,
+      filterDate: this.filterDate,
+      readOnly: this.props.readOnly,
+      showYearDropdown: this.props.showYearDropdown
+    };
+    
+    const inputProps = {
+      rtl,
+      style,
+      theme,
+      prefix,
+      dataHook,
+      onEnterPressed,
+      error,
+      errorMessage,
+      customInput,
+      noLeftBorderRadius,
+      noRightBorderRadius
+    };
+    
     return (
       <div className={classnames(cssClasses)}>
-        <ReactDayPicker
-          {...this.props}
-          ref={calendar => this.calendar = calendar}
-          selectedDay={this.props.value}
-          filterDate={this.filterDate}
-          readOnly={this.props.readOnly}
-          showYearDropdown={this.props.showYearDropdown}
-          scrollableYearDropdown
-          />
+      <DayPickerInput component={DatePickerInput}
+                      dayPickerProps={{...dayPickerProps}}
+                      inputProps={{...inputProps}}
+                      onDayChange={day => console.log(day)} />
       </div>
     );
   }
