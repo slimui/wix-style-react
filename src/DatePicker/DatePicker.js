@@ -3,7 +3,6 @@ import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
 import ReactDayPicker from 'react-day-picker';
 import DatePickerInput from './DatePickerInput';
-import moment from 'moment';
 import classnames from 'classnames';
 import css from './DatePicker.scss';
 
@@ -167,13 +166,7 @@ export default class DatePicker extends WixComponent {
         <ReactDayPicker
           {...this.props}
           ref={calendar => this.calendar = calendar}
-          selected={this.props.value}
-          onChange={val => {
-            if (this.filterDate(val)) {
-              this.props.onChange(val);
-            }
-          }}
-          customInput={this.renderInput()}
+          selectedDay={this.props.value}
           filterDate={this.filterDate}
           readOnly={this.props.readOnly}
           showYearDropdown={this.props.showYearDropdown}
