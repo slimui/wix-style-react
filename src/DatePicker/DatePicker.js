@@ -6,6 +6,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
 import classnames from 'classnames';
 import css from './DatePicker.scss';
+import format from 'date-fns/format';
 
 /**
   * DatePicker component
@@ -100,7 +101,7 @@ export default class DatePicker extends WixComponent {
     style: {
       width: 150
     },
-
+    dateFormat: 'YYYY/MM/DD',
     filterDate: () => true,
     shouldCloseOnSelect: true
   };
@@ -134,7 +135,8 @@ export default class DatePicker extends WixComponent {
   render() {
     const {
       rtl, style, theme, prefix, inputDataHook: dataHook, onEnterPressed,
-      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius
+      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius, 
+      dateFormat, placeholderText = dateFormat, locale
     } = this.props;
     const cssClasses = [css.wrapper, this.props.noLeftBorderRadius, this.props.noRightBorderRadius];
     if (this.props.showYearDropdown || this.props.showMonthDropdown) {
@@ -162,7 +164,7 @@ export default class DatePicker extends WixComponent {
       errorMessage,
       customInput,
       noLeftBorderRadius,
-      noRightBorderRadius
+      noRightBorderRadius,
     };
     
     return (
@@ -170,7 +172,13 @@ export default class DatePicker extends WixComponent {
       <DayPickerInput component={DatePickerInput}
                       dayPickerProps={{...dayPickerProps}}
                       inputProps={{...inputProps}}
-                      onDayChange={day => console.log(day)} />
+                      onDayChange={day => console.log(day)}
+                      placeholder={placeholderText}
+                      format={dateFormat}
+                      locale={locale}
+                      formatDate={(date, dateFormat, locale) => format(date, dateFormat, {
+                        locale
+                      })} />
       </div>
     );
   }
