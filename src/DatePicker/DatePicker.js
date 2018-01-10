@@ -23,6 +23,9 @@ import nl from 'date-fns/locale/nl';
 import da from 'date-fns/locale/da';
 import * as no from 'date-fns/locale/nb';
 
+import addDays from 'date-fns/add_days';
+import subDays from 'date-fns/sub_days';
+
 const locales = {
   en,
   es,
@@ -127,7 +130,11 @@ export default class DatePicker extends WixComponent {
     noLeftBorderRadius: PropTypes.string,
 
     /** When set to true, this input will have no rounded corners on its right */
-    noRightBorderRadius: PropTypes.string
+    noRightBorderRadius: PropTypes.string,
+
+    /** Mappings can be passed in format {keyCode: fn},
+     * example { 39: () => console.log('ArrowRight is pressed') }  */
+    keyMappings: PropTypes.object,
   };
 
   static defaultProps = {
@@ -136,11 +143,14 @@ export default class DatePicker extends WixComponent {
     },
     dateFormat: 'YYYY/MM/DD',
     filterDate: () => true,
-    shouldCloseOnSelect: true
+    shouldCloseOnSelect: true,
+    keyMappings: {}
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {};
   }
 
   getDisabledDays() {
@@ -164,6 +174,41 @@ export default class DatePicker extends WixComponent {
   close() {
     this.calendar.setOpen(false);
   }
+
+  goNextDay(day) {
+    this.setState({
+      focusedDay: addDays(day, 1)
+    });
+  }
+
+  goPrevDay(day) {
+    this.setState({
+      focusedDay: subDays(day, 1)
+    });
+  }
+
+  goNextWeek(day) {
+    this.setState({
+      focusedDay: addDays(day, 7)
+    });
+  }
+
+  goPrevWeek(day) {
+    this.setState({
+      focusedDay: subDays(day, 7)
+    });
+  }
+
+  get keyMappings() {
+    return {
+      37: day => this.goPrevDay(day),
+      38: day => this.goPrevWeek(day),
+      39: day => this.goNextDay(day),
+      40: day => this.goNextWeek(day),
+      ...this.props.keyMappings
+    };
+  }
+
 
   render() {
     const {
@@ -199,9 +244,19 @@ export default class DatePicker extends WixComponent {
     const localeUtils = {
       ...LocaleUtils,
       formatMonthTitle:
-        date => console.log('cat', date) || format(date, 'MMMM YYYY', {
+        date => format(date, 'MMMM YYYY', {
           locale: locales[locale]
         })
+    };
+
+    const modifiers = this.state.focusedDay ? {
+      focused: this.state.focusedDay,
+    } : {};
+
+    const modifiersStyles = {
+      focused: {
+        backgroundColor: '#ffc107',
+      }
     };
 
     const dayPickerProps = {
@@ -211,7 +266,15 @@ export default class DatePicker extends WixComponent {
       locale,
       localeUtils,
       disabledDays: this.getDisabledDays(),
-      showOutsideDays
+      showOutsideDays,
+      onDayKeyDown: (day, modifiers, e) => {
+        const keyHandle = this.keyMappings[e.keyCode];
+        if (keyHandle && typeof keyHandle === 'function') {
+          keyHandle(day);
+        }
+      },
+      modifiers,
+      modifiersStyles
     };
 
     const inputProps = {
