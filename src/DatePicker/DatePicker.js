@@ -19,9 +19,9 @@ import ja from 'date-fns/locale/ja';
 import ko from 'date-fns/locale/ko';
 import tr from 'date-fns/locale/tr';
 import sv from 'date-fns/locale/sv';
-import * as no from 'date-fns/locale/nb';
 import nl from 'date-fns/locale/nl';
 import da from 'date-fns/locale/da';
+import * as no from 'date-fns/locale/nb';
 
 const locales = {
   en,
@@ -154,7 +154,6 @@ export default class DatePicker extends WixComponent {
     return this.props.filterDate(date);
   }
 
-
   /** open the calendar */
   open() {
     this.calendar.setOpen(true);
@@ -235,7 +234,7 @@ export default class DatePicker extends WixComponent {
           placeholder={placeholderText}
           onDayChange={day => console.log(day)}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
-          />
+        />
       </div>
     );
   }
