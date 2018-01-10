@@ -167,12 +167,12 @@ export default class DatePicker extends WixComponent {
 
   /** open the calendar */
   open() {
-    this.calendar.setOpen(true);
+    this.dayPickerInput.showDayPicker();
   }
 
   /** close the calendar */
   close() {
-    this.calendar.setOpen(false);
+    this.dayPickerInput.hideDayPicker();
   }
 
   goNextDay(day) {
@@ -205,6 +205,8 @@ export default class DatePicker extends WixComponent {
       38: day => this.goPrevWeek(day),
       39: day => this.goNextDay(day),
       40: day => this.goNextWeek(day),
+      27: () => this.close(),
+      9: () => this.close(),
       ...this.props.keyMappings
     };
   }
@@ -294,6 +296,7 @@ export default class DatePicker extends WixComponent {
     return (
       <div data-hook={dataHook} className={classnames(cssClasses)}>
         <DayPickerInput
+          ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
           value={value}
           onDayChange={day => onChange(day)}
