@@ -19,7 +19,7 @@ import ja from 'date-fns/locale/ja';
 import ko from 'date-fns/locale/ko';
 import tr from 'date-fns/locale/tr';
 import sv from 'date-fns/locale/sv';
-import nb from 'date-fns/locale/nb';
+import * as no from 'date-fns/locale/nb';
 import nl from 'date-fns/locale/nl';
 import da from 'date-fns/locale/da';
 
@@ -36,7 +36,7 @@ const locales = {
   ko,
   tr,
   sv,
-  no: nb,
+  no,
   nl,
   da
 };
