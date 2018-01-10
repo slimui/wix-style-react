@@ -141,17 +141,18 @@ export default class DatePicker extends WixComponent {
 
   constructor(props) {
     super(props);
-    this.filterDate = this.filterDate.bind(this);
   }
 
-  filterDate(date) {
-    if (this.props.excludePastDates) {
-      if (date < moment().startOf('d')) {
-        return false;
-      }
+  getDisabledDays() {
+    if (this.props.readOnly) {
+      return date => true;
+    } else if (this.props.excludePastDates) {
+      return [{
+        before: new Date()//todo adjust with tz
+      }];
+    } else {
+      return date => !this.props.filterDate(date);
     }
-
-    return this.props.filterDate(date);
   }
 
   /** open the calendar */
@@ -184,7 +185,6 @@ export default class DatePicker extends WixComponent {
       noRightBorderRadius,
       dateFormat,
       placeholderText = dateFormat,
-      excludePastDates,
       locale,
       shouldCloseOnSelect
     } = this.props;
@@ -203,18 +203,13 @@ export default class DatePicker extends WixComponent {
         })
     };
 
-    const disabledDays = excludePastDates ? [{
-      before: new Date()//todo adjust with tz
-    }] : [];//how to handle readOnly?
-
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDay: value,
-      filterDate: this.filterDate,
       showYearDropdown,
       locale,
       localeUtils,
-      disabledDays,
+      disabledDays: this.getDisabledDays(),
       showOutsideDays
     };
 
