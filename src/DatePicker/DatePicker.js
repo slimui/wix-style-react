@@ -1,7 +1,7 @@
 import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
-import ReactDayPicker, { LocaleUtils } from 'react-day-picker';
+import ReactDayPicker, {LocaleUtils} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
 import classnames from 'classnames';
@@ -42,20 +42,20 @@ const locales = {
 };
 
 /**
-  * DatePicker component
-  *
-  * ### Keyboard support
-  * * `Left`: Move to the previous day.
-  * * `Right`: Move to the next day.
-  * * `Up`: Move to the previous week.
-  * * `Down`: Move to the next week.
-  * * `PgUp`: Move to the previous month.
-  * * `PgDn`: Move to the next month.
-  * * `Home`: Move to the previous year.
-  * * `End`: Move to the next year.
-  * * `Enter`/`Esc`/`Tab`: close the calendar. (`Enter` & `Esc` calls `preventDefault`)
-  *
-  */
+ * DatePicker component
+ *
+ * ### Keyboard support
+ * * `Left`: Move to the previous day.
+ * * `Right`: Move to the next day.
+ * * `Up`: Move to the previous week.
+ * * `Down`: Move to the next week.
+ * * `PgUp`: Move to the previous month.
+ * * `PgDn`: Move to the next month.
+ * * `Home`: Move to the previous year.
+ * * `End`: Move to the next year.
+ * * `Enter`/`Esc`/`Tab`: close the calendar. (`Enter` & `Esc` calls `preventDefault`)
+ *
+ */
 export default class DatePicker extends WixComponent {
   static displayName = 'DatePicker';
 
@@ -168,7 +168,7 @@ export default class DatePicker extends WixComponent {
   render() {
     const {
       rtl, style, theme, prefix, inputDataHook: dataHook, onEnterPressed,
-      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius, 
+      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius,
       dateFormat, placeholderText = dateFormat, locale
     } = this.props;
     const cssClasses = [css.wrapper, this.props.noLeftBorderRadius, this.props.noRightBorderRadius];
@@ -177,15 +177,15 @@ export default class DatePicker extends WixComponent {
     } else {
       cssClasses.push({'react-datepicker--hide-header__dropdown': true});
     }
-    
+
     const localeUtils = {
-      ...LocaleUtils, 
-      formatMonthTitle: 
+      ...LocaleUtils,
+      formatMonthTitle:
         date => console.log('cat', date) || format(date, 'MMMM YYYY', {
           locale: locales[locale]
-        }),
+        })
     };
-    
+
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDay: this.props.value,
@@ -193,9 +193,9 @@ export default class DatePicker extends WixComponent {
       readOnly: this.props.readOnly,
       showYearDropdown: this.props.showYearDropdown,
       locale: locale,
-      localeUtils: localeUtils,
+      localeUtils: localeUtils
     };
-    
+
     const inputProps = {
       rtl,
       style,
@@ -207,20 +207,21 @@ export default class DatePicker extends WixComponent {
       errorMessage,
       customInput,
       noLeftBorderRadius,
-      noRightBorderRadius,
+      noRightBorderRadius
     };
-    
+
     return (
       <div className={classnames(cssClasses)}>
-      <DayPickerInput component={DatePickerInput}
-                      dayPickerProps={{...dayPickerProps}}
-                      inputProps={{...inputProps}}
-                      onDayChange={day => console.log(day)}
-                      placeholder={placeholderText}
-                      format={dateFormat}
-                      formatDate={(date, dateFormat, locale) => format(date, dateFormat, {
-                        locale: locales[locale]
-                      })} />
+        <DayPickerInput
+          component={DatePickerInput}
+          dayPickerProps={{...dayPickerProps}}
+          inputProps={{...inputProps}}
+          onDayChange={day => console.log(day)}
+          placeholder={placeholderText}
+          format={dateFormat}
+          formatDate={(date, dateFormat, locale) => format(date, dateFormat, {
+            locale: locales[locale]
+          })}/>
       </div>
     );
   }
