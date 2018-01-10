@@ -167,12 +167,27 @@ export default class DatePicker extends WixComponent {
 
   render() {
     const {
-      rtl, style, theme, prefix, inputDataHook: dataHook, onEnterPressed,
-      error, errorMessage, customInput, noLeftBorderRadius, noRightBorderRadius,
-      dateFormat, placeholderText = dateFormat, locale
+      value,
+      readOnly,
+      showYearDropdown,
+      showMonthDropdown,
+      rtl,
+      style,
+      theme,
+      prefix,
+      inputDataHook: dataHook,
+      onEnterPressed,
+      error,
+      errorMessage,
+      customInput,
+      noLeftBorderRadius,
+      noRightBorderRadius,
+      dateFormat,
+      placeholderText = dateFormat,
+      locale
     } = this.props;
-    const cssClasses = [css.wrapper, this.props.noLeftBorderRadius, this.props.noRightBorderRadius];
-    if (this.props.showYearDropdown || this.props.showMonthDropdown) {
+    const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
+    if (showYearDropdown || showMonthDropdown) {
       cssClasses.push({'react-datepicker--hide-header': true});
     } else {
       cssClasses.push({'react-datepicker--hide-header__dropdown': true});
@@ -188,12 +203,12 @@ export default class DatePicker extends WixComponent {
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
-      selectedDay: this.props.value,
+      selectedDay: value,
       filterDate: this.filterDate,
-      readOnly: this.props.readOnly,
-      showYearDropdown: this.props.showYearDropdown,
-      locale: locale,
-      localeUtils: localeUtils
+      readOnly,
+      showYearDropdown,
+      locale,
+      localeUtils
     };
 
     const inputProps = {
@@ -219,9 +234,8 @@ export default class DatePicker extends WixComponent {
           onDayChange={day => console.log(day)}
           placeholder={placeholderText}
           format={dateFormat}
-          formatDate={(date, dateFormat, locale) => format(date, dateFormat, {
-            locale: locales[locale]
-          })}/>
+          formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
+          />
       </div>
     );
   }
