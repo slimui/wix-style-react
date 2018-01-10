@@ -185,6 +185,7 @@ export default class DatePicker extends WixComponent {
       placeholderText = dateFormat,
       excludePastDates,
       locale,
+      shouldCloseOnSelect,
     } = this.props;
     const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
     if (showYearDropdown || showMonthDropdown) {
@@ -203,13 +204,12 @@ export default class DatePicker extends WixComponent {
 
     const disabledDays = excludePastDates ? [{
       before: new Date()//todo adjust with tz
-    }] : [];
+    }] : [];//how to handle readOnly?
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDay: value,
       filterDate: this.filterDate,
-      readOnly,
       showYearDropdown,
       locale,
       localeUtils,
@@ -241,6 +241,7 @@ export default class DatePicker extends WixComponent {
           placeholder={placeholderText}
           onDayChange={day => console.log(day)}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
+          hideOnDayClick={!shouldCloseOnSelect}
         />
       </div>
     );
