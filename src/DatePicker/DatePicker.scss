@@ -140,10 +140,6 @@ $calendarMargin: 15px;
       display: inline-block;
       padding: 0;
 
-      &:hover {
-        background-color: $B10;
-      }
-
       &--today {
         @include hover-circle($B10);
 
@@ -153,10 +149,6 @@ $calendarMargin: 15px;
         width: 30px;
         height: 30px;
         line-height: 30px;
-
-        &:hover {
-          background-color: $B10;
-        }
       }
 
       &--selected,
@@ -178,7 +170,7 @@ $calendarMargin: 15px;
         box-shadow: 0 0 0 5px $B00;
       }
 
-      &--outside-month {
+      &--outside {
         pointer-events: none;
         color: $D60;
       }
