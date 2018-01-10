@@ -252,13 +252,11 @@ export default class DatePicker extends WixComponent {
     };
 
     const modifiers = this.state.focusedDay ? {
-      focused: this.state.focusedDay,
+      'keyboard-selected': this.state.focusedDay,
     } : {};
 
     const modifiersStyles = {
-      focused: {
-        backgroundColor: '#ffc107',
-      }
+      'keyboard-selected': {}
     };
 
     const dayPickerProps = {
