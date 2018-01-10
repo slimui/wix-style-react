@@ -128,6 +128,7 @@ $calendarMargin: 15px;
 
     &-Day {
       @include FontLight();
+      @include hover-circle($B10);
 
       margin: $cellMargin;
       box-sizing: border-box;
@@ -140,13 +141,7 @@ $calendarMargin: 15px;
       padding: 0;
 
       &:hover {
-        @include hover-circle($B10);
-
-        background-color: transparent;
-        box-shadow: none;
-        $padding: 4px;
-        border-radius: 50%;
-        color: #000;
+        background-color: $B10;
       }
 
       &--today {
@@ -160,18 +155,15 @@ $calendarMargin: 15px;
         line-height: 30px;
 
         &:hover {
-          background-color: $D70;
+          background-color: $B10;
         }
       }
 
       &--selected,
       &--keyboard-selected {
-        $padding: 4px;
         border-radius: 50%;
         position: relative;
-        color: #f0f8ff;
         background-color: #4a90e2;
-        border-radius: 100%;
       }
 
       &--selected {
@@ -189,6 +181,24 @@ $calendarMargin: 15px;
       &--outside-month {
         pointer-events: none;
         color: $D60;
+      }
+
+      &--selected:not(&--disabled):not(&--outside) {
+        position: relative;
+        color: #f0f8ff;
+        background-color: $B10;
+        border-radius: 100%;
+      }
+
+      &--selected:not(&--disabled):not(&--outside):hover {
+        background-color: $B10;
+        color: $D80;
+      }
+
+      .DayPicker:not(.DayPicker--interactionDisabled),
+      &:not(&--disabled):not(&--selected):not(&--outside):hover {
+        background-color: transparent !important;
+        border-radius: 50%;
       }
     }
 
