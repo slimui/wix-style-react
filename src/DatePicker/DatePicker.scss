@@ -37,6 +37,10 @@ $calendarMargin: 15px;
     display: inline-block;
     position: relative;
 
+    &-wrapper {
+      padding: 0;
+    }
+
     &-Month {
       margin: 0;
     }
@@ -95,19 +99,17 @@ $calendarMargin: 15px;
     }
 
     &-Body {
+      display: block;
       margin: 0 $calendarMargin $calendarMargin;
       role: "listbox";
     }
 
     &-Weekdays {
+      display: block;
       background-color: #fff;
-      padding-top: 20px;
-    }
+      margin-left: $calendarMargin;
+      margin-right: $calendarMargin;
 
-    &-WeekdaysRow {
-      role: "row";
-      background-color: #fff;
-      padding-top: 20px;
     }
 
     &-Weekday {
@@ -115,6 +117,9 @@ $calendarMargin: 15px;
       font-weight: normal;
       @include FontLight();
       margin: $cellMargin;
+      display: inline-block;
+      line-height: 1.7rem;
+      text-align: center;
     }
 
     &-Week {
@@ -131,6 +136,8 @@ $calendarMargin: 15px;
       line-height: 30px;
       text-align: center;
       background-color: #FFF;
+      display: inline-block;
+      padding: 0;
 
       &:hover {
         @include hover-circle($B10);
@@ -142,7 +149,7 @@ $calendarMargin: 15px;
         color: #000;
       }
 
-      &-Today {
+      &--today {
         @include hover-circle($B10);
 
         border-radius: 50%;
@@ -161,6 +168,10 @@ $calendarMargin: 15px;
       &--keyboard-selected {
         $padding: 4px;
         border-radius: 50%;
+        position: relative;
+        color: #f0f8ff;
+        background-color: #4a90e2;
+        border-radius: 100%;
       }
 
       &--selected {
@@ -211,7 +222,6 @@ $calendarMargin: 15px;
         border-top-color: #efefef !important;
       }
     }
-
 
     &__day {
       @include FontLight();
@@ -271,10 +281,6 @@ $calendarMargin: 15px;
         pointer-events: none;
         color: $D60;
       }
-    }
-
-    &__day-name {
-
     }
 
     &__current-month {
