@@ -1,7 +1,7 @@
 import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
-import ReactDayPicker, {LocaleUtils} from 'react-day-picker';
+import {LocaleUtils} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
 import classnames from 'classnames';
