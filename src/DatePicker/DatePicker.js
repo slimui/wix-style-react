@@ -225,7 +225,8 @@ export default class DatePicker extends WixComponent {
     };
 
     return (
-      <div className={classnames(cssClasses)}>
+      <div data-hook={dataHook}
+           className={classnames(cssClasses)}>
         <DayPickerInput
           component={DatePickerInput}
           dayPickerProps={dayPickerProps}
