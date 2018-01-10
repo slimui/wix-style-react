@@ -205,7 +205,7 @@ export default class DatePicker extends WixComponent {
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
-      selectedDay: value,
+      selectedDays: new Date(value),
       showYearDropdown,
       locale,
       localeUtils,
@@ -231,11 +231,10 @@ export default class DatePicker extends WixComponent {
       <div data-hook={dataHook} className={classnames(cssClasses)}>
         <DayPickerInput
           component={DatePickerInput}
-          selected={this.props.value}
+          value={value}
           onDayChange={day => {
             if (this.filterDate(day)) {
               this.props.onChange(day);
-              console.log(day);
             }
           }}
           dayPickerProps={dayPickerProps}
@@ -243,7 +242,7 @@ export default class DatePicker extends WixComponent {
           format={dateFormat}
           placeholder={placeholderText}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
-          hideOnDayClick={!shouldCloseOnSelect}
+          hideOnDayClick={shouldCloseOnSelect}
         />
       </div>
     );
