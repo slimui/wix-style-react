@@ -183,7 +183,8 @@ export default class DatePicker extends WixComponent {
       noRightBorderRadius,
       dateFormat,
       placeholderText = dateFormat,
-      locale
+      excludePastDates,
+      locale,
     } = this.props;
     const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
     if (showYearDropdown || showMonthDropdown) {
@@ -200,6 +201,10 @@ export default class DatePicker extends WixComponent {
         })
     };
 
+    const disabledDays = excludePastDates ? [{
+      before: new Date()//todo adjust with tz
+    }] : [];
+
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDay: value,
@@ -207,7 +212,8 @@ export default class DatePicker extends WixComponent {
       readOnly,
       showYearDropdown,
       locale,
-      localeUtils
+      localeUtils,
+      disabledDays
     };
 
     const inputProps = {
