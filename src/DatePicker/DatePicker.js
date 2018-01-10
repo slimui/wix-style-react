@@ -229,11 +229,11 @@ export default class DatePicker extends WixComponent {
       <div className={classnames(cssClasses)}>
         <DayPickerInput
           component={DatePickerInput}
-          dayPickerProps={{...dayPickerProps}}
-          inputProps={{...inputProps}}
-          onDayChange={day => console.log(day)}
-          placeholder={placeholderText}
+          dayPickerProps={dayPickerProps}
+          inputProps={inputProps}
           format={dateFormat}
+          placeholder={placeholderText}
+          onDayChange={day => console.log(day)}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
           />
       </div>
