@@ -186,7 +186,8 @@ export default class DatePicker extends WixComponent {
       dateFormat,
       placeholderText = dateFormat,
       locale,
-      shouldCloseOnSelect
+      shouldCloseOnSelect,
+      onChange
     } = this.props;
     const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
     if (showYearDropdown || showMonthDropdown) {
@@ -232,11 +233,7 @@ export default class DatePicker extends WixComponent {
         <DayPickerInput
           component={DatePickerInput}
           value={value}
-          onDayChange={day => {
-            if (this.filterDate(day)) {
-              this.props.onChange(day);
-            }
-          }}
+          onDayChange={day => onChange(day)}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
           format={dateFormat}
