@@ -31,7 +31,7 @@ $calendarMargin: 15px;
     border: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 0.8rem;
-    background-color: #fff;
+    background-color: $D80;
     color: #000;
     border-radius: 0.3rem;
     display: inline-block;
@@ -44,10 +44,11 @@ $calendarMargin: 15px;
     &-Month {
       margin: 0;
     }
+
     &-Caption {
       text-align: center;
       position: relative;
-      color: #fff;
+      color: $D80;
       font-weight: normal;
       @include FontLight();
       padding: 20px;
@@ -101,12 +102,11 @@ $calendarMargin: 15px;
     &-Body {
       display: block;
       margin: 0 $calendarMargin $calendarMargin;
-      role: "listbox";
     }
 
     &-Weekdays {
       display: block;
-      background-color: #fff;
+      background-color: $D80;
       margin-left: $calendarMargin;
       margin-right: $calendarMargin;
 
@@ -136,7 +136,7 @@ $calendarMargin: 15px;
       height: 30px;
       line-height: 30px;
       text-align: center;
-      background-color: #FFF;
+      background-color: $D80;
       display: inline-block;
       padding: 0;
 
@@ -155,12 +155,12 @@ $calendarMargin: 15px;
       &--keyboard-selected {
         border-radius: 50%;
         position: relative;
-        background-color: #4a90e2;
+        background-color: $B10;
       }
 
       &--selected {
         background-color: $B10 !important;
-        color: #FFF !important;
+        color: $D80 !important;
         box-shadow: 0 0 0 6px $B10 !important;
       }
 
@@ -177,7 +177,7 @@ $calendarMargin: 15px;
 
       &--selected:not(&--disabled):not(&--outside) {
         position: relative;
-        color: #f0f8ff;
+        color: $D80;
         background-color: $B10;
         border-radius: 100%;
       }
@@ -194,174 +194,5 @@ $calendarMargin: 15px;
       }
     }
 
-  }
-  .react-datepicker {
-    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.2);
-    border: 0;
-
-    &__header {
-      background-color: $B10;
-      border-bottom: 0;
-      padding: 0;
-
-      &__dropdown {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        padding: 20px 0;
-        box-sizing: border-box;
-      }
-    }
-
-    &__input-container {
-      width: 100%;
-    }
-
-    &__triangle {
-      border-bottom-color: $B10 !important;
-
-      &:before {
-        border-top-color: #efefef !important;
-      }
-    }
-
-    &__day {
-      @include FontLight();
-
-      margin: $cellMargin;
-      box-sizing: border-box;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      background-color: #FFF;
-
-      &:hover {
-        @include hover-circle($B10);
-
-        background-color: transparent;
-        box-shadow: none;
-        $padding: 4px;
-        border-radius: 50%;
-        color: #000;
-      }
-
-      &--today {
-        @include hover-circle($B10);
-
-        border-radius: 50%;
-        background-color: $D70;
-        font-weight: 300;
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-
-        &:hover {
-          background-color: $D70;
-        }
-      }
-
-      &--selected,
-      &--keyboard-selected {
-        $padding: 4px;
-        border-radius: 50%;
-      }
-
-      &--selected {
-        background-color: $B10 !important;
-        color: #FFF !important;
-        box-shadow: 0 0 0 6px $B10 !important;
-      }
-
-      &--keyboard-selected {
-        @include hover-circle($B10);
-        background-color: $B00;
-        box-shadow: 0 0 0 5px $B00;
-      }
-
-      &--outside-month {
-        pointer-events: none;
-        color: $D60;
-      }
-    }
-
-    &__current-month {
-
-      &--hasYearDropdown,
-      &--hasMonthDropdown {
-        display: none;
-      }
-    }
-
-    &__week {
-      display: flex;
-    }
-
-    &__month {
-      margin: $calendarMargin;
-      margin-top: 0;
-    }
-  }
-
-  .react-datepicker__year,
-  .react-datepicker__month {
-    &-read-view {
-      visibility: visible !important;
-    }
-
-    &-dropdown-container {
-      @include FontLight();
-      font-size: 16px;
-      line-height: 18px;
-      color: $D80;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      margin: 0 6px;
-    }
-
-    &-dropdown {
-      color: $B10;
-      border-radius: 8px;
-      background-color: #fff;
-      width: auto;
-      left: auto;
-      top: 100%;
-      box-shadow: 0 6px 6px 0 rgba(22, 45, 61, 0.06), 0 0 18px 0 rgba(22, 45, 61, 0.12);
-      border: none;
-
-      &--scrollable {
-        height: 180px;
-        overflow-y: scroll;
-      }
-    }
-
-    &-option,
-    &-option {
-      color: $D10;
-      padding: 6px 24px;
-      width: auto;
-
-      &:hover {
-        background-color: $B10;
-        color: $D80;
-      }
-
-      &--selected {
-        left: 3px;
-      }
-    }
-
-    &-read-view--down-arrow {
-      width: 10px;
-      height: 10px;
-      margin-left: 6px;
-      border: none;
-      background: no-repeat url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgMTAgNiI+ICAgIDxwYXRoIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEwIC43MDdMOS4yNzIgMCA0Ljk5OSA0LjE0Ni43MyAwIDAgLjcwNyA1IDUuNTZsNS00Ljg1MyIvPjwvc3ZnPg==');
-    }
-  }
-
-  .react-datepicker--hide-header__dropdown .react-datepicker__header__dropdown.react-datepicker__header__dropdown--scroll {
-    display: none;
   }
 }
