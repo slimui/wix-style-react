@@ -170,6 +170,7 @@ export default class DatePicker extends WixComponent {
       readOnly,
       showYearDropdown,
       showMonthDropdown,
+      showOutsideDays = true,
       rtl,
       style,
       theme,
@@ -185,7 +186,7 @@ export default class DatePicker extends WixComponent {
       placeholderText = dateFormat,
       excludePastDates,
       locale,
-      shouldCloseOnSelect,
+      shouldCloseOnSelect
     } = this.props;
     const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
     if (showYearDropdown || showMonthDropdown) {
@@ -213,7 +214,8 @@ export default class DatePicker extends WixComponent {
       showYearDropdown,
       locale,
       localeUtils,
-      disabledDays
+      disabledDays,
+      showOutsideDays
     };
 
     const inputProps = {
@@ -231,15 +233,20 @@ export default class DatePicker extends WixComponent {
     };
 
     return (
-      <div data-hook={dataHook}
-           className={classnames(cssClasses)}>
+      <div data-hook={dataHook} className={classnames(cssClasses)}>
         <DayPickerInput
           component={DatePickerInput}
+          selected={this.props.value}
+          onDayChange={day => {
+            if (this.filterDate(day)) {
+              this.props.onChange(day);
+              console.log(day);
+            }
+          }}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
           format={dateFormat}
           placeholder={placeholderText}
-          onDayChange={day => console.log(day)}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
           hideOnDayClick={!shouldCloseOnSelect}
         />
