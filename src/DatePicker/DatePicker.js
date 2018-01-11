@@ -279,6 +279,15 @@ export default class DatePicker extends WixComponent {
     });
   }
 
+  selectDay(day) {
+    this.setState({
+      value: day
+    });
+    if (this.props.shouldCloseOnSelect) {
+      this.close();
+    }
+  }
+
   get keyMappings() {
     return {
       37: day => this.goPrevDay(day),
@@ -287,6 +296,7 @@ export default class DatePicker extends WixComponent {
       40: day => this.goNextWeek(day),
       27: () => this.close(),
       9: () => this.close(),
+      13: day => this.selectDay(day),
       33: day => this.goPrevMonth(day),
       34: day => this.goNextMonth(day),
       36: day => this.goPrevYear(day),
@@ -297,8 +307,9 @@ export default class DatePicker extends WixComponent {
 
 
   render() {
+    const value = this.state.value || this.props.value;
+
     const {
-      value,
       showYearDropdown,
       showMonthDropdown,
       showOutsideDays = true,
