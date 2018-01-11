@@ -428,7 +428,7 @@ export default class DatePicker extends WixComponent {
       format: dateFormat,
       formatDate: this.formatDate,
       onDayChange: day => onChange(day),
-      hideOnDayClick: shouldCloseOnSelect,
+      hideOnDayClick: shouldCloseOnSelect
     };
 
     if (disabled) {
