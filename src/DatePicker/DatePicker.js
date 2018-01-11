@@ -329,7 +329,8 @@ export default class DatePicker extends WixComponent {
       placeholderText = dateFormat,
       locale,
       shouldCloseOnSelect,
-      onChange
+      onChange,
+      disabled
     } = this.props;
 
     const {isMonthPickerOpen, isYearPickerOpen, calendarView} = this.state;
@@ -417,21 +418,31 @@ export default class DatePicker extends WixComponent {
       customInput,
       noLeftBorderRadius,
       noRightBorderRadius,
-      onKeyDown
+      onKeyDown,
+      disabled
     };
+
+    const dayPickerInputProps = {
+      value: this.formatDate(value, dateFormat, locale),
+      placeholder: placeholderText,
+      format: dateFormat,
+      formatDate: this.formatDate,
+      onDayChange: day => onChange(day),
+      hideOnDayClick: shouldCloseOnSelect,
+    };
+
+    if (disabled) {
+      dayPickerInputProps.overlayComponent = () => null;
+    }
+
     return (
       <div data-hook={dataHook} className={classNames(cssClasses)}>
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
-          value={this.formatDate(value, dateFormat, locale)}
-          onDayChange={day => onChange(day)}
+          {...dayPickerInputProps}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
-          format={dateFormat}
-          placeholder={placeholderText}
-          formatDate={this.formatDate}
-          hideOnDayClick={shouldCloseOnSelect}
           />
       </div>
     );
