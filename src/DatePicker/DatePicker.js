@@ -303,7 +303,7 @@ export default class DatePicker extends WixComponent {
     };
   }
 
-  formatDate (date, dateFormat, locale) {
+  formatDate(date, dateFormat, locale) {
     return format(date, dateFormat, {locale: locales[locale]});
   }
 
@@ -424,7 +424,7 @@ export default class DatePicker extends WixComponent {
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
-          value={format(value, dateFormat, {locale: locales[locale]})}
+          value={this.formatDate(value, dateFormat, locale)}
           onDayChange={day => onChange(day)}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
