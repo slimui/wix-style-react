@@ -28,6 +28,10 @@ import * as no from 'date-fns/locale/nb';
 
 import addDays from 'date-fns/add_days';
 import subDays from 'date-fns/sub_days';
+import addMonths from 'date-fns/add_months';
+import subMonths from 'date-fns/sub_months';
+import addYears from 'date-fns/add_years';
+import subYears from 'date-fns/sub_years';
 
 import styles from './DatePicker.scss';
 
@@ -178,7 +182,7 @@ export default class DatePicker extends WixComponent {
 
     /** Mappings can be passed in format {keyCode: fn},
      * example { 39: () => console.log('ArrowRight is pressed') }  */
-    keyMappings: PropTypes.object
+    keyMappings: PropTypes.object,
   };
 
   static defaultProps = {
@@ -251,6 +255,30 @@ export default class DatePicker extends WixComponent {
     });
   }
 
+  goNextMonth(day) {
+    this.setState({
+      focusedDay: addMonths(this.state.focusedDay || day, 1)
+    });
+  }
+
+  goPrevMonth(day) {
+    this.setState({
+      focusedDay: subMonths(this.state.focusedDay || day, 1)
+    });
+  }
+
+  goNextYear(day) {
+    this.setState({
+      focusedDay: addYears(this.state.focusedDay || day, 1)
+    });
+  }
+
+  goPrevYear(day) {
+    this.setState({
+      focusedDay: subYears(this.state.focusedDay || day, 1)
+    });
+  }
+
   get keyMappings() {
     return {
       37: day => this.goPrevDay(day),
@@ -259,6 +287,10 @@ export default class DatePicker extends WixComponent {
       40: day => this.goNextWeek(day),
       27: () => this.close(),
       9: () => this.close(),
+      33: day => this.goPrevMonth(day),
+      34: day => this.goNextMonth(day),
+      36: day => this.goPrevYear(day),
+      35: day => this.goNextYear(day),
       ...this.props.keyMappings
     };
   }
@@ -292,6 +324,8 @@ export default class DatePicker extends WixComponent {
 
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
 
+    const { focusedDay } = this.state;
+
     const localeUtils = {
       ...LocaleUtils,
       formatMonthTitle:
@@ -300,8 +334,8 @@ export default class DatePicker extends WixComponent {
         })
     };
 
-    const modifiers = this.state.focusedDay ? {
-      'keyboard-selected': this.state.focusedDay
+    const modifiers = focusedDay ? {
+      'keyboard-selected': focusedDay,
     } : {};
 
     const modifiersStyles = {
@@ -340,15 +374,22 @@ export default class DatePicker extends WixComponent {
       localeUtils,
       disabledDays: this.getDisabledDays(),
       showOutsideDays,
-      onDayKeyDown: (day, modifiers, e) => {
-        const keyHandle = this.keyMappings[e.keyCode];
-        if (keyHandle && typeof keyHandle === 'function') {
-          keyHandle(day);
-        }
-      },
       modifiers,
       modifiersStyles,
       ...showCustomCaption
+    };
+
+    if (focusedDay) {
+      dayPickerProps.month = focusedDay;
+      dayPickerProps.year = focusedDay;
+    }
+
+    const onKeyDown = e => {
+      const keyHandle = this.keyMappings[e.keyCode];
+      if (keyHandle && typeof keyHandle === 'function') {
+        e.preventDefault();
+        keyHandle(focusedDay || value);
+      }
     };
 
     const inputProps = {
@@ -362,7 +403,8 @@ export default class DatePicker extends WixComponent {
       errorMessage,
       customInput,
       noLeftBorderRadius,
-      noRightBorderRadius
+      noRightBorderRadius,
+      onKeyDown
     };
     return (
       <div data-hook={dataHook} className={classNames(cssClasses)}>
