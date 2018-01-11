@@ -2,7 +2,6 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import {mount} from 'enzyme';
 import {createDriverFactory} from '../test-common';
-import moment from 'moment';
 import applyPolyfills from './Polyfills';
 import {datePickerTestkitFactory} from '../../testkit/index';
 import {datePickerTestkitFactory as enzymeDatePickerTestkitFactory} from '../../testkit/enzyme';
@@ -56,7 +55,7 @@ describe('DatePicker', () => {
     it('should show correct value from props depends on date format', () => {
       const date = new Date(2017, 9, 2);
       const {inputDriver} = createDriver(<DatePicker
-        onChange={onChange} value={moment(date)}
+        onChange={onChange} value={date}
         dateFormat={'DD/MM/YYYY'}
         />);
 
@@ -134,7 +133,7 @@ describe('DatePicker', () => {
     });
 
     it('should not call onChange when select selected date with enter', () => {
-      const value = moment(new Date(2017, 5, 2));
+      const value = new Date(2017, 5, 2);
       const {inputDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
       inputDriver.trigger('click');
@@ -144,7 +143,7 @@ describe('DatePicker', () => {
     });
 
     it('should not call onChange when select selected date with click', () => {
-      const value = moment(new Date(2017, 5, 1));
+      const value = new Date(2017, 5, 1);
       const {calendarDriver, inputDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
       inputDriver.trigger('click');
@@ -162,7 +161,7 @@ describe('DatePicker', () => {
       });
 
       it('on select with ArrowUp key', () => {
-        const value = moment(new Date(2017, 5, 2));
+        const value = new Date(2017, 5, 2);
         const {inputDriver, calendarDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
         inputDriver.trigger('keyDown', {key: 'ArrowUp'});
@@ -172,7 +171,7 @@ describe('DatePicker', () => {
 
     describe('should be closed', () => {
       it('on select date with Enter key', () => {
-        const value = moment(new Date(2017, 5, 2));
+        const value = new Date(2017, 5, 2);
         const {inputDriver, calendarDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
         inputDriver.trigger('click');
@@ -225,8 +224,8 @@ describe('DatePicker', () => {
     });
 
     it('should call onChange when click on available day', () => {
-      const value = moment(new Date(2017, 7, 1));
-      const expectedValue = moment(new Date(2017, 7, 2));
+      const value = new Date(2017, 7, 1);
+      const expectedValue = new Date(2017, 7, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           value={value}
@@ -243,7 +242,7 @@ describe('DatePicker', () => {
     });
 
     it('should not give an ability to select past dates if it is specified in props', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -260,7 +259,7 @@ describe('DatePicker', () => {
     });
 
     it('should select previous month on previous month button click', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -277,7 +276,7 @@ describe('DatePicker', () => {
     });
 
     it('should show calendar in provided locale', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -302,7 +301,7 @@ describe('DatePicker', () => {
           onChange={onChange}
           locale="fr"
           dateFormat="YYYY/MM/DD"
-          value={moment(date)}
+          value={date}
           />
       );
 
@@ -310,7 +309,7 @@ describe('DatePicker', () => {
     });
 
     it('should select previous month on next month button click', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -327,7 +326,7 @@ describe('DatePicker', () => {
     });
 
     it('should show header by default', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker onChange={onChange} value={date}/>
       );
@@ -337,7 +336,7 @@ describe('DatePicker', () => {
     });
 
     it('should hide header if year dropdown is visible', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -351,7 +350,7 @@ describe('DatePicker', () => {
     });
 
     it('should hide header if month dropdown is visible', () => {
-      const date = moment(new Date(2015, 9, 2));
+      const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
           onChange={onChange}
@@ -366,7 +365,7 @@ describe('DatePicker', () => {
 
     describe('with year dropdown', () => {
       it('should give a possibility to choose date from another year', () => {
-        const date = moment(new Date(2015, 9, 2));
+        const date = new Date(2015, 9, 2);
         const {calendarDriver, inputDriver} = createDriver(
           <DatePicker
             onChange={onChange}

@@ -33,6 +33,7 @@ import subMonths from 'date-fns/sub_months';
 import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
 import parse from 'date-fns/parse';
+import isEqual from 'date-fns/is_equal';
 
 import styles from './DatePicker.scss';
 
@@ -279,6 +280,9 @@ export default class DatePicker extends WixComponent {
     this.setState({
       value: day
     });
+    if (!isEqual(day, this.state.value || this.props.value)) {
+      this.props.onChange(day);
+    }
     if (this.props.shouldCloseOnSelect) {
       this.close();
     }
@@ -427,7 +431,11 @@ export default class DatePicker extends WixComponent {
       placeholder: placeholderText,
       format: dateFormat,
       formatDate: this.formatDate,
-      onDayChange: day => onChange(day),
+      onDayChange: day => {
+        if (!isEqual(day, value)) {
+          onChange(day);
+        }
+      },
       hideOnDayClick: shouldCloseOnSelect
     };
 
