@@ -208,9 +208,7 @@ export default class DatePicker extends WixComponent {
   handleDropdownSelect = date => this.setState({calendarView: date, isMonthPickerOpen: false, isYearPickerOpen: false});
 
   getDisabledDays() {
-    if (this.props.readOnly) {
-      return () => true;
-    } else if (this.props.excludePastDates) {
+    if (this.props.excludePastDates) {
       return [{
         before: new Date()//todo adjust with tz
       }];
@@ -330,7 +328,8 @@ export default class DatePicker extends WixComponent {
       locale,
       shouldCloseOnSelect,
       onChange,
-      disabled
+      disabled,
+      readOnly
     } = this.props;
 
     const {isMonthPickerOpen, isYearPickerOpen, calendarView} = this.state;
@@ -419,7 +418,8 @@ export default class DatePicker extends WixComponent {
       noLeftBorderRadius,
       noRightBorderRadius,
       onKeyDown,
-      disabled
+      disabled,
+      readOnly
     };
 
     const dayPickerInputProps = {
