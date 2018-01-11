@@ -1,5 +1,5 @@
-import styles from './DatePicker.scss';
 import React from 'react';
+import rangeRight from 'lodash/rangeRight';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
 import {LocaleUtils} from 'react-day-picker';
@@ -29,6 +29,7 @@ import * as no from 'date-fns/locale/nb';
 import addDays from 'date-fns/add_days';
 import subDays from 'date-fns/sub_days';
 
+import styles from './DatePicker.scss';
 
 const locales = {
   en,
@@ -48,28 +49,45 @@ const locales = {
   da
 };
 
-const DropdownPicker = ({localeUtils, date, caption, options, isOpen, onClick, onSelect}) => (
-  <div className={classNames(styles.monthPicker)}>
+const isValidDate = date => Object.prototype.toString.call(date) === '[object Date]';
+
+const parseDate = date => {
+  if (isValidDate(date)) {
+    return date;
+  }
+  if (date._d) {
+    return date._d;
+  }
+  return Date.parse(date);
+};
+
+const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) => (
+  <div>
     <Button height="medium" suffixIcon={<ArrowDownThin/>} onClick={onClick} theme="fullblue">{caption}</Button>
     <DropdownLayout
-      value={date.getMonth()}
+      value={value}
       visible={isOpen}
       options={options}
-      onSelect={({id}) => onSelect(new Date(new Date().getFullYear(), id))}
+      onSelect={onSelect}
+      onClickOutside={onClick}
+      closeOnSelect
     />
   </div>
 );
 
 DropdownPicker.propTypes = {
-  localeUtils: PropTypes.any,
   date: PropTypes.any,
-  caption: PropTypes.string,
+  value: PropTypes.string,
+  caption: PropTypes.any,
   options: PropTypes.array,
   isOpen: PropTypes.bool,
   onClick: PropTypes.func,
   onSelect: PropTypes.func
 };
 
+const StaticCaption = ({caption}) => <div className={classNames(styles.staticCaption)}>{caption}</div>;
+
+const DropdownCaption = ({children}) => <div className={classNames(styles.pickerContainer)}>{children}</div>;
 /**
  * DatePicker component
  *
@@ -178,13 +196,14 @@ export default class DatePicker extends WixComponent {
 
     this.state = {
       isMonthPickerOpen: false,
-      month: new Date()
+      isYearPickerOpen: false,
+      calendarView: new Date()
     };
   }
 
-  toggleMonthPicker = () => this.setState({isMonthPickerOpen: !this.state.isMonthPickerOpen});
+  toggleDropdownPicker = picker => this.setState({[`is${picker}PickerOpen`]: !this.state[`is${picker}PickerOpen`]});
 
-  handleSelectMonth = month => (console.log(month), this.setState({month}));
+  handleDropdownSelect = date => this.setState({calendarView: date, isMonthPickerOpen: false, isYearPickerOpen: false});
 
   getDisabledDays() {
     if (this.props.readOnly) {
@@ -268,13 +287,10 @@ export default class DatePicker extends WixComponent {
       shouldCloseOnSelect,
       onChange
     } = this.props;
-    const {isMonthPickerOpen, month} = this.state;
+
+    const {isMonthPickerOpen, isYearPickerOpen, calendarView} = this.state;
+
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
-    if (showYearDropdown || showMonthDropdown) {
-      cssClasses.push({'react-datepicker--hide-header': true});
-    } else {
-      cssClasses.push({'react-datepicker--hide-header__dropdown': true});
-    }
 
     const localeUtils = {
       ...LocaleUtils,
@@ -291,21 +307,34 @@ export default class DatePicker extends WixComponent {
     const modifiersStyles = {
       'keyboard-selected': {}
     };
+    const showCustomCaption = showMonthDropdown || showYearDropdown ? {
+      captionElement: ({date, localeUtils}) => (
+        <DropdownCaption>
+          {showMonthDropdown ? <DropdownPicker
+            value={date.getMonth()}
+            caption={localeUtils.getMonths()[date.getMonth()]}
+            options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
+            onClick={() => this.toggleDropdownPicker('Month')}
+            onSelect={({id}) => this.handleDropdownSelect(new Date(date.getFullYear(), id))}
+            isOpen={isMonthPickerOpen}
+          /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
+          {showYearDropdown ? <DropdownPicker
+            value={date.getFullYear()}
+            caption={date.getFullYear()}
+            options={rangeRight(1907, new Date().getFullYear() + 1).map((year, i) => ({value: year, id: i}))}
+            onClick={() => this.toggleDropdownPicker('Year')}
+            onSelect={({value}) => this.handleDropdownSelect(new Date(value, date.getMonth()))}
+            isOpen={isYearPickerOpen}
+          /> : <StaticCaption caption={date.getFullYear()}/>}
+        </DropdownCaption>
+      )
+    } : {};
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
-      selectedDays: new Date(value),
-      captionElement: ({date, localeUtils}) =>
-        <DropdownPicker
-          localeUtils={localeUtils}
-          date={date}
-          caption={localeUtils.getMonths()[date.getMonth()]}
-          options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
-          onClick={this.toggleMonthPicker}
-          onSelect={this.handleSelectMonth}
-          isOpen={isMonthPickerOpen}
-        />,
-      month: month,
+      selectedDays: parseDate(value),
+      month: calendarView,
+      year: calendarView,
       showYearDropdown,
       locale,
       localeUtils,
@@ -318,7 +347,8 @@ export default class DatePicker extends WixComponent {
         }
       },
       modifiers,
-      modifiersStyles
+      modifiersStyles,
+      ...showCustomCaption
     };
 
     const inputProps = {
@@ -334,13 +364,12 @@ export default class DatePicker extends WixComponent {
       noLeftBorderRadius,
       noRightBorderRadius
     };
-
     return (
       <div data-hook={dataHook} className={classNames(cssClasses)}>
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
-          value={value}
+          value={parseDate(value)}
           onDayChange={day => onChange(day)}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
