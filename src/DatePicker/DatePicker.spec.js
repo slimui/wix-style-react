@@ -48,7 +48,7 @@ describe('DatePicker', () => {
 
     it('should show correct value from props', () => {
       const date = new Date(2017, 9, 2);
-      const {inputDriver} = createDriver(<DatePicker onChange={onChange} value={moment(date)}/>);
+      const {inputDriver} = createDriver(<DatePicker onChange={onChange} value={date}/>);
 
       expect(inputDriver.getValue()).toBe('10/02/2017');
     });

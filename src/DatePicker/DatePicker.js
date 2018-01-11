@@ -187,7 +187,7 @@ export default class DatePicker extends WixComponent {
     style: {
       width: 150
     },
-    dateFormat: 'YYYY/MM/DD',
+    dateFormat: 'MM/DD/YYYY',
     filterDate: () => true,
     shouldCloseOnSelect: true,
     keyMappings: {}
