@@ -75,7 +75,7 @@ const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) =>
       onSelect={onSelect}
       onClickOutside={onClick}
       closeOnSelect
-    />
+      />
   </div>
 );
 
@@ -91,7 +91,16 @@ DropdownPicker.propTypes = {
 
 const StaticCaption = ({caption}) => <div className={classNames(styles.staticCaption)}>{caption}</div>;
 
+StaticCaption.propTypes = {
+  caption: PropTypes.any
+};
+
 const DropdownCaption = ({children}) => <div className={classNames(styles.pickerContainer)}>{children}</div>;
+
+DropdownCaption.propTypes = {
+  children: PropTypes.any
+};
+
 /**
  * DatePicker component
  *
@@ -182,7 +191,7 @@ export default class DatePicker extends WixComponent {
 
     /** Mappings can be passed in format {keyCode: fn},
      * example { 39: () => console.log('ArrowRight is pressed') }  */
-    keyMappings: PropTypes.object,
+    keyMappings: PropTypes.object
   };
 
   static defaultProps = {
@@ -211,7 +220,7 @@ export default class DatePicker extends WixComponent {
 
   getDisabledDays() {
     if (this.props.readOnly) {
-      return date => true;
+      return () => true;
     } else if (this.props.excludePastDates) {
       return [{
         before: new Date()//todo adjust with tz
@@ -335,7 +344,7 @@ export default class DatePicker extends WixComponent {
 
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
 
-    const { focusedDay } = this.state;
+    const {focusedDay} = this.state;
 
     const localeUtils = {
       ...LocaleUtils,
@@ -346,7 +355,7 @@ export default class DatePicker extends WixComponent {
     };
 
     const modifiers = focusedDay ? {
-      'keyboard-selected': focusedDay,
+      'keyboard-selected': focusedDay
     } : {};
 
     const modifiersStyles = {
@@ -362,7 +371,7 @@ export default class DatePicker extends WixComponent {
             onClick={() => this.toggleDropdownPicker('Month')}
             onSelect={({id}) => this.handleDropdownSelect(new Date(date.getFullYear(), id))}
             isOpen={isMonthPickerOpen}
-          /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
+            /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
           {showYearDropdown ? <DropdownPicker
             value={date.getFullYear()}
             caption={date.getFullYear()}
@@ -370,7 +379,7 @@ export default class DatePicker extends WixComponent {
             onClick={() => this.toggleDropdownPicker('Year')}
             onSelect={({value}) => this.handleDropdownSelect(new Date(value, date.getMonth()))}
             isOpen={isYearPickerOpen}
-          /> : <StaticCaption caption={date.getFullYear()}/>}
+            /> : <StaticCaption caption={date.getFullYear()}/>}
         </DropdownCaption>
       )
     } : {};
@@ -430,7 +439,7 @@ export default class DatePicker extends WixComponent {
           placeholder={placeholderText}
           formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
           hideOnDayClick={shouldCloseOnSelect}
-        />
+          />
       </div>
     );
   }
