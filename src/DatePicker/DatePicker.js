@@ -32,6 +32,7 @@ import addMonths from 'date-fns/add_months';
 import subMonths from 'date-fns/sub_months';
 import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
+import parse from 'date-fns/parse';
 
 import styles from './DatePicker.scss';
 
@@ -51,18 +52,6 @@ const locales = {
   no,
   nl,
   da
-};
-
-const isValidDate = date => Object.prototype.toString.call(date) === '[object Date]';
-
-const parseDate = date => {
-  if (isValidDate(date)) {
-    return date;
-  }
-  if (date._d) {
-    return date._d;
-  }
-  return Date.parse(date);
 };
 
 const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) => (
@@ -314,6 +303,9 @@ export default class DatePicker extends WixComponent {
     };
   }
 
+  formatDate (date, dateFormat, locale) {
+    return format(date, dateFormat, {locale: locales[locale]});
+  }
 
   render() {
     const value = this.state.value || this.props.value;
@@ -362,6 +354,7 @@ export default class DatePicker extends WixComponent {
       'keyboard-selected': {}
     };
     const showCustomCaption = showMonthDropdown || showYearDropdown ? {
+      //eslint-disable-next-line
       captionElement: ({date, localeUtils}) => (
         <DropdownCaption>
           {showMonthDropdown ? <DropdownPicker
@@ -386,7 +379,7 @@ export default class DatePicker extends WixComponent {
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
-      selectedDays: parseDate(value),
+      selectedDays: parse(value),
       month: calendarView,
       year: calendarView,
       showYearDropdown,
@@ -431,13 +424,13 @@ export default class DatePicker extends WixComponent {
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
-          value={parseDate(value)}
+          value={format(value, dateFormat, {locale: locales[locale]})}
           onDayChange={day => onChange(day)}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
           format={dateFormat}
           placeholder={placeholderText}
-          formatDate={(date, dateFormat, locale) => format(date, dateFormat, {locale: locales[locale]})}
+          formatDate={this.formatDate}
           hideOnDayClick={shouldCloseOnSelect}
           />
       </div>
