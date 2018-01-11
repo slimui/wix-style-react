@@ -57,7 +57,14 @@ const locales = {
 
 const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) => (
   <div>
-    <Button height="medium" suffixIcon={<ArrowDownThin/>} onClick={onClick} theme="fullblue">{caption}</Button>
+    <Button
+      height="medium"
+      suffixIcon={<ArrowDownThin/>}
+      onClick={onClick}
+      theme="dark-no-border"
+    >
+      {caption}
+    </Button>
     <DropdownLayout
       value={value}
       visible={isOpen}
@@ -213,9 +220,9 @@ export default class DatePicker extends WixComponent {
       return [{
         before: new Date()//todo adjust with tz
       }];
-    } else {
-      return date => !this.props.filterDate(date);
     }
+
+    return date => !this.props.filterDate(date);
   }
 
   /** open the calendar */
@@ -353,11 +360,9 @@ export default class DatePicker extends WixComponent {
       readOnly
     } = this.props;
 
-    const {isMonthPickerOpen, isYearPickerOpen, calendarView} = this.state;
+    const {isMonthPickerOpen, isYearPickerOpen, calendarView, focusedDay} = this.state;
 
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
-
-    const {focusedDay} = this.state;
 
     const localeUtils = {
       ...LocaleUtils,
@@ -367,13 +372,9 @@ export default class DatePicker extends WixComponent {
         })
     };
 
-    const modifiers = focusedDay ? {
-      'keyboard-selected': focusedDay
-    } : {};
+    const modifiers = focusedDay ? {'keyboard-selected': focusedDay} : {};
+    const modifiersStyles = {'keyboard-selected': {}};
 
-    const modifiersStyles = {
-      'keyboard-selected': {}
-    };
     const showCustomCaption = showMonthDropdown || showYearDropdown ? {
       //eslint-disable-next-line
       captionElement: ({date, localeUtils}) => (
