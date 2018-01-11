@@ -1,11 +1,14 @@
+import styles from './DatePicker.scss';
 import React from 'react';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
 import {LocaleUtils} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
-import classnames from 'classnames';
-import css from './DatePicker.scss';
+import DropdownLayout from '../DropdownLayout';
+import Button from '../Button';
+import {ArrowDownThin} from '../Icons';
+import classNames from 'classnames';
 import format from 'date-fns/format';
 import en from 'date-fns/locale/en';
 import es from 'date-fns/locale/es';
@@ -26,6 +29,7 @@ import * as no from 'date-fns/locale/nb';
 import addDays from 'date-fns/add_days';
 import subDays from 'date-fns/sub_days';
 
+
 const locales = {
   en,
   es,
@@ -42,6 +46,28 @@ const locales = {
   no,
   nl,
   da
+};
+
+const DropdownPicker = ({localeUtils, date, caption, options, isOpen, onClick, onSelect}) => (
+  <div className={classNames(styles.monthPicker)}>
+    <Button height="medium" suffixIcon={<ArrowDownThin/>} onClick={onClick} theme="fullblue">{caption}</Button>
+    <DropdownLayout
+      value={date.getMonth()}
+      visible={isOpen}
+      options={options}
+      onSelect={({id}) => onSelect(new Date(new Date().getFullYear(), id))}
+    />
+  </div>
+);
+
+DropdownPicker.propTypes = {
+  localeUtils: PropTypes.any,
+  date: PropTypes.any,
+  caption: PropTypes.string,
+  options: PropTypes.array,
+  isOpen: PropTypes.bool,
+  onClick: PropTypes.func,
+  onSelect: PropTypes.func
 };
 
 /**
@@ -134,7 +160,7 @@ export default class DatePicker extends WixComponent {
 
     /** Mappings can be passed in format {keyCode: fn},
      * example { 39: () => console.log('ArrowRight is pressed') }  */
-    keyMappings: PropTypes.object,
+    keyMappings: PropTypes.object
   };
 
   static defaultProps = {
@@ -150,8 +176,15 @@ export default class DatePicker extends WixComponent {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isMonthPickerOpen: false,
+      month: new Date()
+    };
   }
+
+  toggleMonthPicker = () => this.setState({isMonthPickerOpen: !this.state.isMonthPickerOpen});
+
+  handleSelectMonth = month => (console.log(month), this.setState({month}));
 
   getDisabledDays() {
     if (this.props.readOnly) {
@@ -215,7 +248,6 @@ export default class DatePicker extends WixComponent {
   render() {
     const {
       value,
-      readOnly,
       showYearDropdown,
       showMonthDropdown,
       showOutsideDays = true,
@@ -236,7 +268,8 @@ export default class DatePicker extends WixComponent {
       shouldCloseOnSelect,
       onChange
     } = this.props;
-    const cssClasses = [css.wrapper, noLeftBorderRadius, noRightBorderRadius];
+    const {isMonthPickerOpen, month} = this.state;
+    const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
     if (showYearDropdown || showMonthDropdown) {
       cssClasses.push({'react-datepicker--hide-header': true});
     } else {
@@ -252,7 +285,7 @@ export default class DatePicker extends WixComponent {
     };
 
     const modifiers = this.state.focusedDay ? {
-      'keyboard-selected': this.state.focusedDay,
+      'keyboard-selected': this.state.focusedDay
     } : {};
 
     const modifiersStyles = {
@@ -262,6 +295,17 @@ export default class DatePicker extends WixComponent {
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
       selectedDays: new Date(value),
+      captionElement: ({date, localeUtils}) =>
+        <DropdownPicker
+          localeUtils={localeUtils}
+          date={date}
+          caption={localeUtils.getMonths()[date.getMonth()]}
+          options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
+          onClick={this.toggleMonthPicker}
+          onSelect={this.handleSelectMonth}
+          isOpen={isMonthPickerOpen}
+        />,
+      month: month,
       showYearDropdown,
       locale,
       localeUtils,
@@ -292,7 +336,7 @@ export default class DatePicker extends WixComponent {
     };
 
     return (
-      <div data-hook={dataHook} className={classnames(cssClasses)}>
+      <div data-hook={dataHook} className={classNames(cssClasses)}>
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
