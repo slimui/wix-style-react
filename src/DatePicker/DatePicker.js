@@ -151,7 +151,7 @@ export default class DatePicker extends WixComponent {
     style: {
       width: 150
     },
-    dateFormat: 'MM/DD/YYYY',
+    locale: 'en',
     filterDate: () => true,
     shouldCloseOnSelect: true,
     keyMappings: {}
@@ -286,7 +286,9 @@ export default class DatePicker extends WixComponent {
   }
 
   formatDate(date, dateFormat, locale) {
-    return format(date, dateFormat, {locale: locales[locale]});
+    return dateFormat || !date ?
+      format(date, dateFormat, {locale: locales[locale]}) :
+      date.toLocaleDateString(locale);//todo adjust date-fns with default country formats
   }
 
   render() {
