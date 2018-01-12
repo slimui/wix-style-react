@@ -286,9 +286,8 @@ export default class DatePicker extends WixComponent {
   }
 
   formatDate(date, dateFormat, locale) {
-    return dateFormat || !date ?
-      format(date, dateFormat, {locale: locales[locale]}) :
-      date.toLocaleDateString(locale);//todo adjust date-fns with default country formats
+    return format(date, dateFormat || locale.dateFormat, {locale: locales[locale]});
+    //todo adjust date-fns with default country formats
   }
 
   render() {
