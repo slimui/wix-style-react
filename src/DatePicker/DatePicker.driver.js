@@ -9,7 +9,7 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
   const getNthDay = n => element.querySelectorAll('[role="gridcell"]:not([class*="outside"])')[n];
   const getYearDropdown = () => element.querySelector('[class$="year-read-view"]');
   const getNthYear = n => element.querySelectorAll('[class*="year-option"]')[n];
-  const getMonthAndYear = () => element.querySelector('[class="react-datepicker__current-month"]');
+  const getMonthAndYear = () => element.querySelector('[class="DayPicker-Caption"] div');
   const getNthWeekDayName = n => element.querySelectorAll('[class="react-datepicker__day-name"]')[n];
   const getPrevMonthButton = () => element.querySelector('[class$="DayPicker-NavButton--prev"]');
   const getNextMonthButton = () => element.querySelector('[class$="DayPicker-NavButton--next"]');

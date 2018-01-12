@@ -319,12 +319,21 @@ export default class DatePicker extends WixComponent {
 
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
 
+    const {focusedDay} = this.state;
+
     const localeUtils = {
       ...LocaleUtils,
-      formatMonthTitle:
-        date => format(date, 'MMMM YYYY', {
-          locale: locales[locale]
-        })
+      formatMonthTitle: date => format(date, 'MMMM YYYY', {
+        locale: locales[locale]
+      }),
+      formatWeekdayShort: i => console.log('weekday short', i, format(i, 'ddd', {
+        locale: locales[locale]
+      })) || format(i.toString(), 'dd', {
+        locale: locales[locale]
+      }),
+      formatWeekdayLong: i => format(i.toString(), 'dddd', {
+        locale: locales[locale]
+      })
     };
 
     const modifiers = focusedDay ? {'keyboard-selected': focusedDay} : {};

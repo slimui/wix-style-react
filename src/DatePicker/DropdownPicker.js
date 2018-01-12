@@ -13,7 +13,7 @@ export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSele
       suffixIcon={<ArrowDownThin/>}
       onClick={onClick}
       theme="dark-no-border"
-    >
+      >
       {caption}
     </Button>
     <DropdownLayout
@@ -23,7 +23,7 @@ export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSele
       onSelect={onSelect}
       onClickOutside={onClick}
       closeOnSelect
-    />
+      />
   </div>
 );
 
