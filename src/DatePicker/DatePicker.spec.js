@@ -8,6 +8,7 @@ import {datePickerTestkitFactory as enzymeDatePickerTestkitFactory} from '../../
 import datePickerDriverFactory from './DatePicker.driver';
 import Input from '../Input';
 import DatePicker from './DatePicker';
+import isEqual from 'date-fns/is_equal';
 
 describe('DatePicker', () => {
   const createDriver = createDriverFactory(datePickerDriverFactory);
@@ -238,7 +239,7 @@ describe('DatePicker', () => {
       const newValue = onChange.mock.calls[0][0];
 
       expect(onChange).toHaveBeenCalled();
-      expect(newValue.diff(expectedValue)).toBe(0);
+      expect(isEqual(newValue, expectedValue)).toBe(true);
     });
 
     it('should not give an ability to select past dates if it is specified in props', () => {
@@ -272,7 +273,7 @@ describe('DatePicker', () => {
       calendarDriver.clickOnNthDay();
 
       const newDate = onChange.mock.calls[0][0];
-      expect(newDate.month()).toEqual(8);
+      expect(newDate.getMonth()).toEqual(8);
     });
 
     it('should show calendar in provided locale', () => {

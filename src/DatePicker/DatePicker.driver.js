@@ -11,8 +11,8 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
   const getNthYear = n => element.querySelectorAll('[class*="year-option"]')[n];
   const getMonthAndYear = () => element.querySelector('[class="react-datepicker__current-month"]');
   const getNthWeekDayName = n => element.querySelectorAll('[class="react-datepicker__day-name"]')[n];
-  const getPrevMonthButton = () => element.querySelector('[class$="navigation--previous"]');
-  const getNextMonthButton = () => element.querySelector('[class$="navigation--next"]');
+  const getPrevMonthButton = () => element.querySelector('[class$="DayPicker-NavButton--prev"]');
+  const getNextMonthButton = () => element.querySelector('[class$="DayPicker-NavButton--next"]');
 
   const driver = {
     exists: () => !!element
