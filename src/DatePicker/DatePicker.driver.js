@@ -29,7 +29,7 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
     clickOnNextMonthButton: () => ReactTestUtils.Simulate.click(getNextMonthButton()),
     open: () => componentInstance.open(),
     close: () => componentInstance.close(),
-    isHeaderVisible: () => !(wrapper.querySelector('.react-datepicker--hide-header'))
+    isCaptionVisible: () => !!wrapper.querySelector('[class="DayPicker-Caption"]')
   };
 
   return {
