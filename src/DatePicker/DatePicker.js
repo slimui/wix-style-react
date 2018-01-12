@@ -319,8 +319,6 @@ export default class DatePicker extends WixComponent {
 
     const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
 
-    const {focusedDay} = this.state;
-
     const localeUtils = {
       ...LocaleUtils,
       formatMonthTitle: date => format(date, 'MMMM YYYY', {
