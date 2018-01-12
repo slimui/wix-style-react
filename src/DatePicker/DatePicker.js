@@ -32,6 +32,7 @@ import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
 import parse from 'date-fns/parse';
 import isEqual from 'date-fns/is_equal';
+import setDay from 'date-fns/set_day';
 
 import styles from './DatePicker.scss';
 
@@ -324,12 +325,10 @@ export default class DatePicker extends WixComponent {
       formatMonthTitle: date => format(date, 'MMMM YYYY', {
         locale: locales[locale]
       }),
-      formatWeekdayShort: i => console.log('weekday short', i, format(i, 'ddd', {
-        locale: locales[locale]
-      })) || format(i.toString(), 'dd', {
+      formatWeekdayShort: index => format(setDay(new Date(), index), 'dd', {
         locale: locales[locale]
       }),
-      formatWeekdayLong: i => format(i.toString(), 'dddd', {
+      formatWeekdayLong: index => format(setDay(new Date(), index), 'dddd', {
         locale: locales[locale]
       })
     };
@@ -375,6 +374,7 @@ export default class DatePicker extends WixComponent {
       showOutsideDays,
       modifiers,
       modifiersStyles,
+      firstDayOfWeek: 1,
       ...showCustomCaption
     };
 

@@ -289,8 +289,8 @@ describe('DatePicker', () => {
       inputDriver.trigger('click');
       calendarDriver.clickOnPrevMonthButton();
 
-      expect(calendarDriver.getNthWeekDayName(0)).toEqual('Lu');
-      expect(calendarDriver.getNthWeekDayName(6)).toEqual('Di');
+      expect(calendarDriver.getNthWeekDayName(0)).toEqual('lu');
+      expect(calendarDriver.getNthWeekDayName(6)).toEqual('di');
       expect(calendarDriver.getCurrentMonthWithYear()).toEqual('septembre 2015');
       expect(inputDriver.getValue()).toBe('02/10/2015');
     });
