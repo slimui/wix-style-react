@@ -161,10 +161,10 @@ describe('DatePicker', () => {
         expect(calendarDriver.isVisible()).toBe(true);
       });
 
-      it('on select with ArrowUp key', () => {
+      it('on focus', () => {
         const value = new Date(2017, 5, 2);
         const {inputDriver, calendarDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
-        inputDriver.trigger('keyDown', {key: 'ArrowUp', keyCode: 38});
+        inputDriver.focus();
         expect(calendarDriver.isVisible()).toBe(true);
       });
     });
