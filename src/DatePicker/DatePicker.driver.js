@@ -5,7 +5,7 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
 
   const inputRoot = element && element.children[0].querySelector('.root');
   const inputDriver = inputDriverFactory({element: inputRoot, wrapper});
-  const getCalendar = () => element.querySelector('.react-datepicker');
+  const getCalendar = () => element.querySelector('.DayPicker');
   const getNthDay = n => element.querySelectorAll('[role="gridcell"]:not([class*="outside"])')[n];
   const getYearDropdown = () => element.querySelector('[class$="year-read-view"]');
   const getNthYear = n => element.querySelectorAll('[class*="year-option"]')[n];
