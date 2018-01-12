@@ -71,7 +71,7 @@ const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) =>
 
 DropdownPicker.propTypes = {
   date: PropTypes.any,
-  value: PropTypes.string,
+  value: PropTypes.number,
   caption: PropTypes.any,
   options: PropTypes.array,
   isOpen: PropTypes.bool,
@@ -200,7 +200,7 @@ export default class DatePicker extends WixComponent {
     this.state = {
       isMonthPickerOpen: false,
       isYearPickerOpen: false,
-      calendarView: new Date()
+      calendarView: props.value || new Date()
     };
   }
 
@@ -229,50 +229,66 @@ export default class DatePicker extends WixComponent {
   }
 
   goNextDay(day) {
+    const focusedDay = addDays(day, 1);
     this.setState({
-      focusedDay: addDays(day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goPrevDay(day) {
+    const focusedDay = subDays(day, 1);
     this.setState({
-      focusedDay: subDays(day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goNextWeek(day) {
+    const focusedDay = addDays(day, 7);
     this.setState({
-      focusedDay: addDays(day, 7)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goPrevWeek(day) {
+    const focusedDay = subDays(day, 7);
     this.setState({
-      focusedDay: subDays(day, 7)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goNextMonth(day) {
+    const focusedDay = addMonths(this.state.focusedDay || day, 1);
     this.setState({
-      focusedDay: addMonths(this.state.focusedDay || day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goPrevMonth(day) {
+    const focusedDay = subMonths(this.state.focusedDay || day, 1);
     this.setState({
-      focusedDay: subMonths(this.state.focusedDay || day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goNextYear(day) {
+    const focusedDay = addYears(this.state.focusedDay || day, 1);
     this.setState({
-      focusedDay: addYears(this.state.focusedDay || day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
   goPrevYear(day) {
+    const focusedDay = subYears(this.state.focusedDay || day, 1);
     this.setState({
-      focusedDay: subYears(this.state.focusedDay || day, 1)
+      focusedDay,
+      calendarView: focusedDay
     });
   }
 
@@ -280,6 +296,7 @@ export default class DatePicker extends WixComponent {
     this.setState({
       value: day
     });
+
     if (!isEqual(day, this.state.value || this.props.value)) {
       this.props.onChange(day);
     }
@@ -383,6 +400,8 @@ export default class DatePicker extends WixComponent {
 
     const dayPickerProps = {
       ref: calendar => this.calendar = calendar,
+      initialMonth: calendarView,
+      initialYear: calendarView,
       selectedDays: parse(value),
       month: calendarView,
       year: calendarView,
@@ -395,11 +414,6 @@ export default class DatePicker extends WixComponent {
       modifiersStyles,
       ...showCustomCaption
     };
-
-    if (focusedDay) {
-      dayPickerProps.month = focusedDay;
-      dayPickerProps.year = focusedDay;
-    }
 
     const onKeyDown = e => {
       const keyHandle = this.keyMappings[e.keyCode];
