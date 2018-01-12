@@ -138,7 +138,7 @@ describe('DatePicker', () => {
       const {inputDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
       inputDriver.trigger('click');
-      inputDriver.trigger('keyDown', {key: 'Enter'});
+      inputDriver.trigger('keyDown', {keyCode: 13});
 
       expect(onChange).not.toHaveBeenCalled();
     });
@@ -164,8 +164,7 @@ describe('DatePicker', () => {
       it('on select with ArrowUp key', () => {
         const value = new Date(2017, 5, 2);
         const {inputDriver, calendarDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
-
-        inputDriver.trigger('keyDown', {key: 'ArrowUp'});
+        inputDriver.trigger('keyDown', {key: 'ArrowUp', keyCode: 38});
         expect(calendarDriver.isVisible()).toBe(true);
       });
     });
@@ -176,8 +175,8 @@ describe('DatePicker', () => {
         const {inputDriver, calendarDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
         inputDriver.trigger('click');
-        inputDriver.trigger('keyDown', {key: 'ArrowRight'});
-        inputDriver.trigger('keyDown', {key: 'Enter'});
+        inputDriver.trigger('keyDown', {key: 'ArrowRight', keyCode: 39});
+        inputDriver.trigger('keyDown', {key: 'Enter', keyCode: 13});
 
         expect(calendarDriver.isVisible()).toBe(false);
       });
@@ -195,7 +194,7 @@ describe('DatePicker', () => {
         const {inputDriver, calendarDriver} = createDriver(<DatePicker onChange={onChange}/>);
 
         inputDriver.trigger('click');
-        inputDriver.trigger('keyDown', {key: 'Escape'});
+        inputDriver.trigger('keyDown', {key: 'Escape', keyCode: 27});
 
         expect(calendarDriver.isVisible()).toBe(false);
       });
@@ -204,7 +203,7 @@ describe('DatePicker', () => {
         const {inputDriver, calendarDriver} = createDriver(<DatePicker onChange={onChange}/>);
 
         inputDriver.trigger('click');
-        inputDriver.trigger('keyDown', {key: 'Tab'});
+        inputDriver.trigger('keyDown', {key: 'Tab', keyCode: 9});
 
         expect(calendarDriver.isVisible()).toBe(false);
       });
