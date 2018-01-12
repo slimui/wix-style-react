@@ -309,7 +309,7 @@ describe('DatePicker', () => {
       expect(inputDriver.getValue()).toBe('2017/10/02');
     });
 
-    it('should select previous month on next month button click', () => {
+    it('should select next month on next month button click', () => {
       const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
@@ -323,7 +323,7 @@ describe('DatePicker', () => {
       calendarDriver.clickOnNthDay();
 
       const newDate = onChange.mock.calls[0][0];
-      expect(newDate.month()).toEqual(10);
+      expect(newDate.getMonth()).toEqual(10);
     });
 
     it('should show header by default', () => {
