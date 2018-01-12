@@ -326,17 +326,17 @@ describe('DatePicker', () => {
       expect(newDate.getMonth()).toEqual(10);
     });
 
-    it('should show header by default', () => {
+    it('should show caption by default', () => {
       const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker onChange={onChange} value={date}/>
       );
 
       inputDriver.trigger('click');
-      expect(calendarDriver.isHeaderVisible()).toEqual(true);
+      expect(calendarDriver.isCaptionVisible()).toEqual(true);
     });
 
-    it('should hide header if year dropdown is visible', () => {
+    it('should hide caption if year dropdown is visible', () => {
       const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
@@ -347,10 +347,10 @@ describe('DatePicker', () => {
       );
 
       inputDriver.trigger('click');
-      expect(calendarDriver.isHeaderVisible()).toEqual(false);
+      expect(calendarDriver.isCaptionVisible()).toEqual(false);
     });
 
-    it('should hide header if month dropdown is visible', () => {
+    it('should hide caption if month dropdown is visible', () => {
       const date = new Date(2015, 9, 2);
       const {calendarDriver, inputDriver} = createDriver(
         <DatePicker
@@ -361,7 +361,7 @@ describe('DatePicker', () => {
       );
 
       inputDriver.trigger('click');
-      expect(calendarDriver.isHeaderVisible()).toEqual(false);
+      expect(calendarDriver.isCaptionVisible()).toEqual(false);
     });
 
     describe('with year dropdown', () => {
