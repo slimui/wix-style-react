@@ -24,25 +24,29 @@ $navButtonOffset: 10px;
   }
 }
 
-.picker-container {
+.dropdown-caption-container {
   display: flex;
   flex-direction: row;
   align-content: center;
   position: relative;
   justify-content: center;
   padding: 20px;
-  margin-top: -13px;
+  margin-top: -10px;
+}
+
+.dropdown-container {
+  position: relative;
+  top: 2px;
 }
 
 .static-caption {
   position: relative;
   color: $D80;
-  font-weight: normal;
+  font-weight: 300;
   @include FontLight();
-  padding-top: 7px;
-  padding-left: 30px;
+  padding-top: 10px;
   font-size: 16px;
-  line-height: 1.3;
+  line-height: 1.13;
 }
 
 :global {
@@ -68,15 +72,18 @@ $navButtonOffset: 10px;
     }
 
     &-Caption {
-      text-align: center;
-      position: relative;
-      color: $D80;
-      font-weight: normal;
-      @include FontLight();
-      padding: 20px;
-      font-size: 16px;
-      line-height: 1.3;
-      margin: 0;
+      >div {
+        text-align: center;
+        position: relative;
+        color: $D80;
+        font-weight: normal;
+        @include FontLight();
+        padding: 20px;
+        font-size: 16px;
+        line-height: 1.13;
+        margin: 0;
+      }
+
     }
 
     &-NavBar {
@@ -131,7 +138,7 @@ $navButtonOffset: 10px;
       background-color: $D80;
       margin-left: $calendarMargin;
       margin-right: $calendarMargin;
-
+      margin-top: 0;
     }
 
     &-Weekday {
