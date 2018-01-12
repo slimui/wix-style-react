@@ -629,8 +629,10 @@ $base-transition: all 100ms linear;
     color: #fff;
     @extend .t1_2;
 
-    &:hover {
-        color: $B10;
+    &.hover {
+        &:hover {
+            color: $B10;
+        }
     }
 
     &.heightx-large {
