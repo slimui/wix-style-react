@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 import {LocaleUtils} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import DatePickerInput from './DatePickerInput';
-import DropdownLayout from '../DropdownLayout';
-import Button from '../Button';
-import {ArrowDownThin} from '../Icons';
+import {DropdownPicker, DropdownCaption, StaticCaption} from './DropdownPicker';
 import classNames from 'classnames';
 import format from 'date-fns/format';
 import en from 'date-fns/locale/en';
@@ -53,49 +51,6 @@ const locales = {
   no,
   nl,
   da
-};
-
-const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) => (
-  <div>
-    <Button
-      height="medium"
-      suffixIcon={<ArrowDownThin/>}
-      onClick={onClick}
-      theme="dark-no-border"
-    >
-      {caption}
-    </Button>
-    <DropdownLayout
-      value={value}
-      visible={isOpen}
-      options={options}
-      onSelect={onSelect}
-      onClickOutside={onClick}
-      closeOnSelect
-      />
-  </div>
-);
-
-DropdownPicker.propTypes = {
-  date: PropTypes.any,
-  value: PropTypes.number,
-  caption: PropTypes.any,
-  options: PropTypes.array,
-  isOpen: PropTypes.bool,
-  onClick: PropTypes.func,
-  onSelect: PropTypes.func
-};
-
-const StaticCaption = ({caption}) => <div className={classNames(styles.staticCaption)}>{caption}</div>;
-
-StaticCaption.propTypes = {
-  caption: PropTypes.any
-};
-
-const DropdownCaption = ({children}) => <div className={classNames(styles.pickerContainer)}>{children}</div>;
-
-DropdownCaption.propTypes = {
-  children: PropTypes.any
 };
 
 /**
@@ -463,9 +418,9 @@ export default class DatePicker extends WixComponent {
         <DayPickerInput
           ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
           component={DatePickerInput}
-          {...dayPickerInputProps}
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
+          {...dayPickerInputProps}
           />
       </div>
     );
