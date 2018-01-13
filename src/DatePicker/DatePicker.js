@@ -1,4 +1,5 @@
 import React from 'react';
+import Popper from 'popper.js';
 import rangeRight from 'lodash/rangeRight';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
@@ -342,6 +343,7 @@ export default class DatePicker extends WixComponent {
       captionElement: ({date, localeUtils}) => (
         <DropdownCaption>
           {showMonthDropdown ? <DropdownPicker
+            dataHook="show-month-dropdown"
             value={date.getMonth()}
             caption={localeUtils.getMonths()[date.getMonth()]}
             options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
@@ -350,6 +352,8 @@ export default class DatePicker extends WixComponent {
             isOpen={isMonthPickerOpen}
             /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
           {showYearDropdown ? <DropdownPicker
+            dataHook="show-year-dropdown"
+
             value={date.getFullYear()}
             caption={date.getFullYear()}
             options={rangeRight(1907, new Date().getFullYear() + 1).map((year, i) => ({value: year, id: i}))}
@@ -362,7 +366,6 @@ export default class DatePicker extends WixComponent {
     } : {};
 
     const dayPickerProps = {
-      ref: calendar => this.calendar = calendar,
       initialMonth: calendarView,
       initialYear: calendarView,
       selectedDays: parse(value),

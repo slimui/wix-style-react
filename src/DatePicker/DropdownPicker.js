@@ -6,9 +6,10 @@ import {ArrowDownThin} from '../Icons';
 import classNames from 'classnames';
 import styles from './DatePicker.scss';
 
-export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect}) => (
+export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSelect, dataHook}) => (
   <div className={styles.dropdownContainer}>
     <Button
+      dataHook={`${dataHook}-button`}
       height="medium"
       suffixIcon={<ArrowDownThin/>}
       onClick={onClick}
@@ -17,6 +18,7 @@ export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSele
       {caption}
     </Button>
     <DropdownLayout
+      dataHook={`${dataHook}-menu`}
       value={value}
       visible={isOpen}
       options={options}
@@ -28,6 +30,7 @@ export const DropdownPicker = ({value, caption, options, isOpen, onClick, onSele
 );
 
 DropdownPicker.propTypes = {
+  dataHook: PropTypes.string,
   date: PropTypes.any,
   value: PropTypes.number,
   caption: PropTypes.any,

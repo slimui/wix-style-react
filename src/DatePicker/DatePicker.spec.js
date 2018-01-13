@@ -380,7 +380,7 @@ describe('DatePicker', () => {
         calendarDriver.clickOnNthDay();
 
         const newDate = onChange.mock.calls[0][0];
-        expect(newDate.year()).not.toEqual(date.year());
+        expect(newDate.getFullYear()).not.toEqual(date.getFullYear());
       });
     });
 
