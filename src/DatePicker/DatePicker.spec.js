@@ -187,7 +187,7 @@ describe('DatePicker', () => {
         inputDriver.trigger('click');
         calendarDriver.clickOnNthDay();
 
-        expect(calendarDriver.isVisible()).toBe(false);
+        setTimeout(() => expect(calendarDriver.isVisible()).toBe(false), 0);
       });
 
       it('on press "Escape" key', () => {
