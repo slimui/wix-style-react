@@ -7,6 +7,7 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
   const inputDriver = inputDriverFactory({element: inputRoot, wrapper});
   const getCalendar = () => element.querySelector('.DayPicker');
   const getNthDay = n => element.querySelectorAll('[role="gridcell"]:not([class*="outside"])')[n];
+  const getSelectedDay = () => element.querySelector('[role="gridcell"][aria-selected=true]');
   const getYearDropdown = () => element.querySelector('[data-hook="show-year-dropdown-button"]');
   const getNthYear = n => element.querySelector(`[data-hook="dropdown-item-${n}"]`);
   const getMonthAndYear = () => element.querySelector('[class="DayPicker-Caption"] div');
@@ -23,6 +24,7 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
     getCurrentMonthWithYear: () => getMonthAndYear() ? getMonthAndYear().textContent : '',
     getNthWeekDayName: (n = 0) => getNthWeekDayName(n) ? getNthWeekDayName(n).textContent : '',
     clickOnNthDay: (n = 0) => ReactTestUtils.Simulate.click(getNthDay(n)),
+    clickOnSelectedDay: () => ReactTestUtils.Simulate.click(getSelectedDay()),
     clickOnYearDropdown: () => ReactTestUtils.Simulate.click(getYearDropdown()),
     clickOnNthYear: (n = 1) => ReactTestUtils.Simulate.mouseDown(getNthYear(n)),
     clickOnPrevMonthButton: () => ReactTestUtils.Simulate.click(getPrevMonthButton()),

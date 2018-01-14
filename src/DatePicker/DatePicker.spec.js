@@ -8,7 +8,7 @@ import {datePickerTestkitFactory as enzymeDatePickerTestkitFactory} from '../../
 import datePickerDriverFactory from './DatePicker.driver';
 import Input from '../Input';
 import DatePicker from './DatePicker';
-import isEqual from 'date-fns/is_equal';
+import isSameDay from 'date-fns/is_same_day';
 
 describe('DatePicker', () => {
   const createDriver = createDriverFactory(datePickerDriverFactory);
@@ -133,7 +133,7 @@ describe('DatePicker', () => {
       expect(calendarDriver.isVisible()).toBe(false);
     });
 
-    it('should not call onChange when select selected date with enter', () => {
+    it('should not call onChange when trying to select an already selected date with enter', () => {
       const value = new Date(2017, 5, 2);
       const {inputDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
@@ -143,12 +143,12 @@ describe('DatePicker', () => {
       expect(onChange).not.toHaveBeenCalled();
     });
 
-    it('should not call onChange when select selected date with click', () => {
-      const value = new Date(2017, 5, 1);
+    it('should not call onChange when trying to select an already selected date with click', () => {
+      const value = new Date();
       const {calendarDriver, inputDriver} = createDriver(<DatePicker value={value} onChange={onChange}/>);
 
       inputDriver.trigger('click');
-      calendarDriver.clickOnNthDay();
+      calendarDriver.clickOnSelectedDay();
 
       expect(onChange).not.toHaveBeenCalled();
     });
@@ -238,7 +238,7 @@ describe('DatePicker', () => {
       const newValue = onChange.mock.calls[0][0];
 
       expect(onChange).toHaveBeenCalled();
-      expect(isEqual(newValue, expectedValue)).toBe(true);
+      expect(isSameDay(newValue, expectedValue)).toBe(true);
     });
 
     it('should not give an ability to select past dates if it is specified in props', () => {
@@ -291,7 +291,7 @@ describe('DatePicker', () => {
       expect(calendarDriver.getNthWeekDayName(0)).toEqual('lu');
       expect(calendarDriver.getNthWeekDayName(6)).toEqual('di');
       expect(calendarDriver.getCurrentMonthWithYear()).toEqual('septembre 2015');
-      expect(inputDriver.getValue()).toBe('02/10/2015');
+      expect(inputDriver.getValue()).toBe('10/02/2015');
     });
 
     it('should show date in provided format instead of locale format', () => {

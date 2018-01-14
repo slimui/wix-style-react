@@ -1,5 +1,4 @@
 import React from 'react';
-import Popper from 'popper.js';
 import rangeRight from 'lodash/rangeRight';
 import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
@@ -32,7 +31,7 @@ import subMonths from 'date-fns/sub_months';
 import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
 import parse from 'date-fns/parse';
-import isEqual from 'date-fns/is_equal';
+import isSameDay from 'date-fns/is_same_day';
 import setDay from 'date-fns/set_day';
 
 import styles from './DatePicker.scss';
@@ -153,6 +152,7 @@ export default class DatePicker extends WixComponent {
       width: 150
     },
     locale: 'en',
+    dateFormat: 'MM/DD/YYYY',
     filterDate: () => true,
     shouldCloseOnSelect: true,
     keyMappings: {}
@@ -261,7 +261,7 @@ export default class DatePicker extends WixComponent {
       value: day
     });
 
-    if (!isEqual(day, this.state.value || this.props.value)) {
+    if (!isSameDay(day, this.state.value || this.props.value)) {
       this.props.onChange(day);
     }
     if (this.props.shouldCloseOnSelect) {
@@ -269,7 +269,7 @@ export default class DatePicker extends WixComponent {
     }
   }
 
-  get keyMappings() {
+  get keyMapping() {
     return {
       37: day => this.goPrevDay(day),
       38: day => this.goPrevWeek(day),
@@ -288,7 +288,6 @@ export default class DatePicker extends WixComponent {
 
   formatDate(date, dateFormat, locale) {
     return format(date, dateFormat || locale.dateFormat, {locale: locales[locale]});
-    //todo adjust date-fns with default country formats
   }
 
   render() {
@@ -383,7 +382,7 @@ export default class DatePicker extends WixComponent {
     };
 
     const onKeyDown = e => {
-      const keyHandle = this.keyMappings[e.keyCode];
+      const keyHandle = this.keyMapping[e.keyCode];
       if (keyHandle && typeof keyHandle === 'function') {
         e.preventDefault();
         keyHandle(focusedDay || value);
@@ -413,7 +412,7 @@ export default class DatePicker extends WixComponent {
       format: dateFormat,
       formatDate: this.formatDate,
       onDayChange: day => {
-        if (!isEqual(day, value)) {
+        if (!isSameDay(day, value)) {
           onChange(day);
         }
       },
