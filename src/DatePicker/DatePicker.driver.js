@@ -29,8 +29,8 @@ const datePickerDriverFactory = ({element, wrapper, componentInstance}) => {
     clickOnNthYear: (n = 1) => ReactTestUtils.Simulate.mouseDown(getNthYear(n)),
     clickOnPrevMonthButton: () => ReactTestUtils.Simulate.click(getPrevMonthButton()),
     clickOnNextMonthButton: () => ReactTestUtils.Simulate.click(getNextMonthButton()),
-    open: () => componentInstance.open(),
-    close: () => componentInstance.close(),
+    open: () => componentInstance.openCalendar(),
+    close: () => componentInstance.closeCalendar(),
     isCaptionVisible: () => !!wrapper.querySelector('[class="DayPicker-Caption"]')
   };
 

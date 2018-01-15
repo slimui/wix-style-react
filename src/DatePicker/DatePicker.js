@@ -1,29 +1,10 @@
 import React from 'react';
-import rangeRight from 'lodash/rangeRight';
-import WixComponent from '../BaseComponents/WixComponent';
 import PropTypes from 'prop-types';
-import {LocaleUtils} from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import DatePickerInput from './DatePickerInput';
-import {DropdownPicker, DropdownCaption, StaticCaption} from './DropdownPicker';
+import {LocaleUtils} from 'react-day-picker';
 import classNames from 'classnames';
-import format from 'date-fns/format';
-import en from 'date-fns/locale/en';
-import es from 'date-fns/locale/es';
-import pt from 'date-fns/locale/pt';
-import fr from 'date-fns/locale/fr';
-import de from 'date-fns/locale/de';
-import pl from 'date-fns/locale/pl';
-import it from 'date-fns/locale/it';
-import ru from 'date-fns/locale/ru';
-import ja from 'date-fns/locale/ja';
-import ko from 'date-fns/locale/ko';
-import tr from 'date-fns/locale/tr';
-import sv from 'date-fns/locale/sv';
-import nl from 'date-fns/locale/nl';
-import da from 'date-fns/locale/da';
-import * as no from 'date-fns/locale/nb';
-
+import pick from 'lodash/pick';
+import isFunction from 'lodash/isFunction';
 import addDays from 'date-fns/add_days';
 import subDays from 'date-fns/sub_days';
 import addMonths from 'date-fns/add_months';
@@ -32,27 +13,18 @@ import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
 import parse from 'date-fns/parse';
 import isSameDay from 'date-fns/is_same_day';
-import setDay from 'date-fns/set_day';
-
+import WixComponent from '../BaseComponents/WixComponent';
+import DatePickerInput from './DatePickerInput';
+import {DropdownPicker, DropdownCaption, StaticCaption} from './DropdownPicker';
+import {
+  createFormatMonthTitle,
+  createFormatWeekdayLong,
+  createFormatWeekdayShort,
+  formatDate,
+  getMonths,
+  getYears
+} from './LocaleUtils';
 import styles from './DatePicker.scss';
-
-const locales = {
-  en,
-  es,
-  pt,
-  fr,
-  de,
-  pl,
-  it,
-  ru,
-  ja,
-  ko,
-  tr,
-  sv,
-  no,
-  nl,
-  da
-};
 
 /**
  * DatePicker component
@@ -168,16 +140,9 @@ export default class DatePicker extends WixComponent {
     };
   }
 
-  toggleDropdownPicker = picker => () => {
-    console.log(picker);
-    this.setState({[`is${picker}PickerOpen`]: !this.state[`is${picker}PickerOpen`]});
-  };
+  toggleDropdownPicker = picker => () => this.setState({[`is${picker}PickerOpen`]: !this.state[`is${picker}PickerOpen`]});
 
-  closeDropdownPicker = e => {
-    console.log(e);
-
-    this.setState({isYearPickerOpen: false, isMonthPickerOpen: false});
-  }
+  closeDropdownPicker = () => this.setState({isYearPickerOpen: false, isMonthPickerOpen: false});
 
   handleDropdownSelect = date => this.setState({calendarView: date, isMonthPickerOpen: false, isYearPickerOpen: false});
 
@@ -191,13 +156,11 @@ export default class DatePicker extends WixComponent {
     return date => !this.props.filterDate(date);
   }
 
-  /** open the calendar */
-  open() {
+  openCalendar() {
     this.dayPickerInput.showDayPicker();
   }
 
-  /** close the calendar */
-  close() {
+  closeCalendar() {
     this.dayPickerInput.hideDayPicker();
   }
 
@@ -274,7 +237,7 @@ export default class DatePicker extends WixComponent {
       this.props.onChange(day);
     }
     if (this.props.shouldCloseOnSelect) {
-      this.close();
+      this.closeCalendar();
     }
   }
 
@@ -284,8 +247,8 @@ export default class DatePicker extends WixComponent {
       38: day => this.goPrevWeek(day),
       39: day => this.goNextDay(day),
       40: day => this.goNextWeek(day),
-      27: () => this.close(),
-      9: () => this.close(),
+      27: () => this.closeCalendar(),
+      9: () => this.closeCalendar(),
       13: day => this.selectDay(day),
       33: day => this.goPrevMonth(day),
       34: day => this.goNextMonth(day),
@@ -295,153 +258,143 @@ export default class DatePicker extends WixComponent {
     };
   }
 
-  formatDate(date, dateFormat, locale) {
-    return format(date, dateFormat, {locale: locales[locale]});
-  }
-
-  render() {
+  createDayPickerProps() {
     const value = this.state.value || this.props.value;
-
-    const {
-      showYearDropdown,
-      showMonthDropdown,
-      showOutsideDays = true,
-      rtl,
-      style,
-      theme,
-      prefix,
-      inputDataHook: dataHook,
-      onEnterPressed,
-      error,
-      errorMessage,
-      customInput,
-      noLeftBorderRadius,
-      noRightBorderRadius,
-      dateFormat,
-      placeholderText = dateFormat,
-      locale,
-      shouldCloseOnSelect,
-      onChange,
-      disabled,
-      readOnly
-    } = this.props;
-
-    const {isMonthPickerOpen, isYearPickerOpen, calendarView, focusedDay} = this.state;
-
-    const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
-
+    const {locale, showMonthDropdown, showYearDropdown, showOutsideDays = true} = this.props;
+    const {calendarView, focusedDay} = this.state;
     const localeUtils = {
       ...LocaleUtils,
-      formatMonthTitle: date => format(date, 'MMMM YYYY', {
-        locale: locales[locale]
-      }),
-      formatWeekdayShort: index => format(setDay(new Date(), index), 'dd', {
-        locale: locales[locale]
-      }),
-      formatWeekdayLong: index => format(setDay(new Date(), index), 'dddd', {
-        locale: locales[locale]
-      })
+      formatMonthTitle: createFormatMonthTitle(locale),
+      formatWeekdayShort: createFormatWeekdayShort(locale),
+      formatWeekdayLong: createFormatWeekdayLong(locale)
     };
 
     const modifiers = focusedDay ? {'keyboard-selected': focusedDay} : {};
     const modifiersStyles = {'keyboard-selected': {}};
-
     const showCustomCaption = showMonthDropdown || showYearDropdown ? {
-      //eslint-disable-next-line
+      // eslint-disable-next-line react/prop-types
       captionElement: ({date, localeUtils}) => (
         <DropdownCaption>
-          {showMonthDropdown ? <DropdownPicker
-            dataHook="show-month-dropdown"
-            value={date.getMonth()}
-            caption={localeUtils.getMonths()[date.getMonth()]}
-            options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
-            onClick={this.toggleDropdownPicker('Month')}
-            closeDropdownPicker={this.closeDropdownPicker}
-            onSelect={({id}) => this.handleDropdownSelect(new Date(date.getFullYear(), id))}
-            isOpen={isMonthPickerOpen}
-          /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
-          {showYearDropdown ? <DropdownPicker
-            dataHook="show-year-dropdown"
-            value={date.getFullYear()}
-            caption={date.getFullYear()}
-            options={rangeRight(2007, new Date().getFullYear() + 11).map((year, i) => ({value: year, id: i}))}
-            onClick={this.toggleDropdownPicker('Year')}
-            closeDropdownPicker={this.closeDropdownPicker}
-            onSelect={({value}) => this.handleDropdownSelect(new Date(value, date.getMonth()))}
-            isOpen={isYearPickerOpen}
-          /> : <StaticCaption caption={date.getFullYear()}/>}
+          {showMonthDropdown ? this.createMonthDropdown({date, localeUtils}) :
+          <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
+          {showYearDropdown ? this.createYearDropdown({date}) : <StaticCaption caption={date.getFullYear()}/>}
         </DropdownCaption>
       )
     } : {};
 
-    const dayPickerProps = {
+    return {
+      disabledDays: this.getDisabledDays(),
       initialMonth: calendarView,
       initialYear: calendarView,
       selectedDays: parse(value),
       month: calendarView,
       year: calendarView,
+      firstDayOfWeek: 1,
       showYearDropdown,
       locale,
       localeUtils,
-      disabledDays: this.getDisabledDays(),
       showOutsideDays,
       modifiers,
       modifiersStyles,
-      firstDayOfWeek: 1,
       ...showCustomCaption
     };
+  }
 
-    const onKeyDown = e => {
-      const keyHandle = this.keyMapping[e.keyCode];
-      if (keyHandle && typeof keyHandle === 'function') {
-        e.preventDefault();
-        keyHandle(focusedDay || value);
-      }
-    };
-
-    const inputProps = {
-      rtl,
-      style,
-      theme,
-      prefix,
-      dataHook,
-      onEnterPressed,
-      error,
-      errorMessage,
-      customInput,
-      noLeftBorderRadius,
-      noRightBorderRadius,
-      onKeyDown,
-      disabled,
-      readOnly
-    };
-
+  createDayPickerInputProps() {
+    const value = this.state.value || this.props.value;
+    const {dateFormat, locale, placeholderText, shouldCloseOnSelect, disabled, onChange} = this.props;
     const dayPickerInputProps = {
-      value: this.formatDate(value, dateFormat, locale),
+      value: formatDate(value, dateFormat, locale),
       placeholder: placeholderText,
       format: dateFormat,
-      formatDate: this.formatDate,
+      formatDate: formatDate,
+      hideOnDayClick: shouldCloseOnSelect,
       onDayChange: day => {
         if (!isSameDay(day, value)) {
           onChange(day);
         }
-      },
-      hideOnDayClick: shouldCloseOnSelect
+      }
     };
 
     if (disabled) {
       dayPickerInputProps.overlayComponent = () => null;
     }
 
+    return dayPickerInputProps;
+  }
+
+  createInputProps() {
+    const onKeyDown = e => {
+      const handleKey = this.keyMapping[e.keyCode];
+      if (isFunction(handleKey)) {
+        e.preventDefault();
+        handleKey(this.state.focusedDay || this.props.value);
+      }
+    };
+
+    return {
+      onKeyDown,
+      dataHook: this.props.inputDataHook,
+      ...pick(this.props, [
+        'rtl',
+        'style',
+        'theme',
+        'prefix',
+        'onEnterPressed',
+        'error',
+        'errorMessage',
+        'customInput',
+        'noLeftBorderRadius',
+        'noRightBorderRadius',
+        'disabled',
+        'readOnly'
+      ])
+    };
+  }
+
+  createMonthDropdown({date, localeUtils}) {
+    return (
+      <DropdownPicker
+        dataHook="show-month-dropdown"
+        value={date.getMonth()}
+        caption={localeUtils.getMonths()[date.getMonth()]}
+        options={getMonths(localeUtils)}
+        onClick={this.toggleDropdownPicker('Month')}
+        closeDropdownPicker={this.closeDropdownPicker}
+        onSelect={({id}) => this.handleDropdownSelect(new Date(date.getFullYear(), id))}
+        isOpen={this.state.isMonthPickerOpen}
+        />
+    );
+  }
+
+  createYearDropdown({date}) {
+    return (
+      <DropdownPicker
+        dataHook="show-year-dropdown"
+        value={date.getFullYear()}
+        caption={date.getFullYear()}
+        options={getYears()}
+        onClick={this.toggleDropdownPicker('Year')}
+        closeDropdownPicker={this.closeDropdownPicker}
+        onSelect={({value}) => this.handleDropdownSelect(new Date(value, date.getMonth()))}
+        isOpen={this.state.isYearPickerOpen}
+        />
+    );
+  }
+
+  render() {
+    const {inputDataHook: dataHook, noLeftBorderRadius, noRightBorderRadius} = this.props;
+    const cssClasses = [styles.wrapper, noLeftBorderRadius, noRightBorderRadius];
+
     return (
       <div data-hook={dataHook} className={classNames(cssClasses)}>
         <DayPickerInput
-          ref={dayPickerInput => (this.dayPickerInput = dayPickerInput)}
+          ref={dayPickerInput => this.dayPickerInput = dayPickerInput}
           component={DatePickerInput}
-          dayPickerProps={dayPickerProps}
-          inputProps={inputProps}
-          {...dayPickerInputProps}
-        />
+          dayPickerProps={this.createDayPickerProps()}
+          inputProps={this.createInputProps()}
+          {...this.createDayPickerInputProps()}
+          />
       </div>
     );
   }
