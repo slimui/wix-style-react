@@ -307,7 +307,7 @@ export default class DatePicker extends WixComponent {
       value: formatDate(value, dateFormat, locale),
       placeholder: placeholderText,
       format: dateFormat,
-      formatDate: formatDate,
+      formatDate,
       hideOnDayClick: shouldCloseOnSelect,
       onDayChange: day => {
         if (!isSameDay(day, value)) {
