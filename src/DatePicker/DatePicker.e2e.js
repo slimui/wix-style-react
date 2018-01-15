@@ -46,6 +46,8 @@ describe('DatePicker', () => {
       inputDriver.click();
       calendarDriver.clickOnNthAvailableDay(1);
 
+      browser.sleep(80); // protractor quirk
+
       expect(calendarDriver.exists()).toBe(false);
     });
 
