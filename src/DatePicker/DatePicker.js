@@ -168,7 +168,16 @@ export default class DatePicker extends WixComponent {
     };
   }
 
-  toggleDropdownPicker = picker => this.setState({[`is${picker}PickerOpen`]: !this.state[`is${picker}PickerOpen`]});
+  toggleDropdownPicker = picker => () => {
+    console.log(picker);
+    this.setState({[`is${picker}PickerOpen`]: !this.state[`is${picker}PickerOpen`]});
+  };
+
+  closeDropdownPicker = e => {
+    console.log(e);
+
+    this.setState({isYearPickerOpen: false, isMonthPickerOpen: false});
+  }
 
   handleDropdownSelect = date => this.setState({calendarView: date, isMonthPickerOpen: false, isYearPickerOpen: false});
 
@@ -287,7 +296,7 @@ export default class DatePicker extends WixComponent {
   }
 
   formatDate(date, dateFormat, locale) {
-    return format(date, dateFormat || locale.dateFormat, {locale: locales[locale]});
+    return format(date, dateFormat, {locale: locales[locale]});
   }
 
   render() {
@@ -346,20 +355,21 @@ export default class DatePicker extends WixComponent {
             value={date.getMonth()}
             caption={localeUtils.getMonths()[date.getMonth()]}
             options={localeUtils.getMonths().map((month, i) => ({value: month, id: i}))}
-            onClick={() => this.toggleDropdownPicker('Month')}
+            onClick={this.toggleDropdownPicker('Month')}
+            closeDropdownPicker={this.closeDropdownPicker}
             onSelect={({id}) => this.handleDropdownSelect(new Date(date.getFullYear(), id))}
             isOpen={isMonthPickerOpen}
-            /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
+          /> : <StaticCaption caption={localeUtils.getMonths()[date.getMonth()]}/>}
           {showYearDropdown ? <DropdownPicker
             dataHook="show-year-dropdown"
-
             value={date.getFullYear()}
             caption={date.getFullYear()}
-            options={rangeRight(1907, new Date().getFullYear() + 1).map((year, i) => ({value: year, id: i}))}
-            onClick={() => this.toggleDropdownPicker('Year')}
+            options={rangeRight(2007, new Date().getFullYear() + 11).map((year, i) => ({value: year, id: i}))}
+            onClick={this.toggleDropdownPicker('Year')}
+            closeDropdownPicker={this.closeDropdownPicker}
             onSelect={({value}) => this.handleDropdownSelect(new Date(value, date.getMonth()))}
             isOpen={isYearPickerOpen}
-            /> : <StaticCaption caption={date.getFullYear()}/>}
+          /> : <StaticCaption caption={date.getFullYear()}/>}
         </DropdownCaption>
       )
     } : {};
@@ -431,7 +441,7 @@ export default class DatePicker extends WixComponent {
           dayPickerProps={dayPickerProps}
           inputProps={inputProps}
           {...dayPickerInputProps}
-          />
+        />
       </div>
     );
   }

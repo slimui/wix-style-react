@@ -69,7 +69,7 @@ describe('DatePicker', () => {
       inputDriver.click();
       inputDriver.pressEnterKey();
 
-      expect(inputDriver.getValue()).toBe('2017/01/01');
+      expect(inputDriver.getValue()).toBe('2017/05/01');
     });
 
     eyes.it('should select next day date', () => {
@@ -77,7 +77,7 @@ describe('DatePicker', () => {
       inputDriver.pressArrowRightKey();
       inputDriver.pressEnterKey();
 
-      expect(inputDriver.getValue()).toBe('2017/01/02');
+      expect(inputDriver.getValue()).toBe('2017/05/02');
     });
   });
 
@@ -89,7 +89,7 @@ describe('DatePicker', () => {
       calendarDriver.clickOnNthYear();
       calendarDriver.clickOnNthAvailableDay();
 
-      expect(inputDriver.getValue()).toBe('2027/01/01');
+      expect(inputDriver.getValue()).toBe('2027/05/01');
     });
 
     eyes.it('should select February', () => {
@@ -99,19 +99,19 @@ describe('DatePicker', () => {
       calendarDriver.clickOnNthMonth(2);
       calendarDriver.clickOnNthAvailableDay();
 
-      expect(inputDriver.getValue()).toBe('2017/02/01');
+      expect(inputDriver.getValue()).toBe('2027/02/01');
     });
 
-    eyes.it('should select January and 2027 year', () => {
+    eyes.it('should select February and 2026 year', () => {
       autoExampleDriver.setProps({showYearDropdown: true, showMonthDropdown: true});
       inputDriver.click();
       calendarDriver.openYearDropdownOptions();
-      calendarDriver.clickOnNthYear();
+      calendarDriver.clickOnNthYear(2);
       calendarDriver.openMonthDropdownOptions();
-      calendarDriver.clickOnNthMonth();
+      calendarDriver.clickOnNthMonth(2);
       calendarDriver.clickOnNthAvailableDay();
 
-      expect(inputDriver.getValue()).toBe('2027/01/01');
+      expect(inputDriver.getValue()).toBe('2026/02/01');
     });
   });
 });

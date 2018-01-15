@@ -1,11 +1,11 @@
 const datePickerDriverFactory = component => {
   const getInput = () => component.$('input');
-  const getCalendar = () => component.$('.react-datepicker');
-  const getNthAvailableDay = n => component.$$('[role="option"]:not([class*="outside-month"])').get(n);
-  const getYearDropdown = () => component.$('[class$="year-read-view"]');
-  const getNthYear = n => component.$$('[class*="year-option"]').get(n);
-  const getMonthsDropdown = () => component.$('[class$="month-read-view"]');
-  const getNthMonth = n => component.$$('[class*="month-option"]').get(n);
+  const getCalendar = () => component.$('.DayPicker');
+  const getNthAvailableDay = n => component.$$('[role="gridcell"]:not([class*="outside"])').get(n);
+  const getYearDropdown = () => component.$('[data-hook="show-year-dropdown-button"]');
+  const getNthYear = n => component.$(`[data-hook="show-year-dropdown-menu"] [data-hook="dropdown-item-${n}"]`);
+  const getMonthsDropdown = () => component.$('[data-hook="show-month-dropdown-button"]');
+  const getNthMonth = n => component.$(`[data-hook="show-month-dropdown-menu"] [data-hook="dropdown-item-${n === 0 ? n : n - 1}"]`);
 
   return {
     inputDriver: {
