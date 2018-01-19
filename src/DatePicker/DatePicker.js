@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import {LocaleUtils} from 'react-day-picker';
 import classNames from 'classnames';
 import pick from 'lodash/pick';
 import isFunction from 'lodash/isFunction';
+
+import {LocaleUtils} from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+
 import addDays from 'date-fns/add_days';
 import subDays from 'date-fns/sub_days';
 import addMonths from 'date-fns/add_months';
@@ -13,9 +15,14 @@ import addYears from 'date-fns/add_years';
 import subYears from 'date-fns/sub_years';
 import parse from 'date-fns/parse';
 import isSameDay from 'date-fns/is_same_day';
+
 import WixComponent from '../BaseComponents/WixComponent';
 import DatePickerInput from './DatePickerInput';
-import {DropdownPicker, DropdownCaption, StaticCaption} from './DropdownPicker';
+import {
+  DropdownPicker,
+  DropdownCaption,
+  StaticCaption
+} from './DropdownPicker';
 import {
   createFormatMonthTitle,
   createFormatWeekdayLong,
@@ -24,6 +31,7 @@ import {
   getMonths,
   getYears
 } from './LocaleUtils';
+
 import styles from './DatePicker.scss';
 
 /**
