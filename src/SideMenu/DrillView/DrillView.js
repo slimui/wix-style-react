@@ -81,6 +81,11 @@ class SideMenuDrill extends WixComponent {
       return true;
     }
 
+    if (item.props.onMouseDown) {
+      item.props.onMouseDown(event);
+      return true;
+    }
+
     Children.forEach(item.props.children, child => {
       if (!found && child.props) {
         found = this.clickFirstClickableChild(child, event);

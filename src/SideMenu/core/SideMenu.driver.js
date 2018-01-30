@@ -28,12 +28,12 @@ const sideMenuDriverFactory = ({element}) => {
     navigationSeparators: () => getNavigationSeparators(),
     navigationCategories: () => getNavigationCategories(),
     navigationCategoryContent: index => getNavigationCategories()[index].textContent,
-    clickLinkByIndex: index => ReactTestUtils.Simulate.click(getNavigationLinks()[index]),
-    clickInnerLinkByIndex: index => {
+    clickLinkByIndex: (index, eventType = 'click') => ReactTestUtils.Simulate[eventType](getNavigationLinks()[index]),
+    clickInnerLinkByIndex: (index, eventType = 'click') => {
       const innerLink = getNavigationLinkWrappers()[index].querySelector('a');
-      ReactTestUtils.Simulate.click(innerLink);
+      ReactTestUtils.Simulate[eventType](innerLink);
     },
-    clickBackLink: () => ReactTestUtils.Simulate.click(getNavigationBackLink()),
+    clickBackLink: (eventType = 'click') => ReactTestUtils.Simulate[eventType](getNavigationBackLink()),
     promotionContent: () => getPromotion().textContent,
     footerContent: () => getFooter().textContent
   };

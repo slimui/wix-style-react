@@ -7,11 +7,11 @@ import NavigationLink from '../core/navigation/Link';
 import NavigationBackLink from '../core/navigation/BackLink';
 import NavigationCategory from '../core/navigation/Category';
 
-const SubMenu = ({children, title, isOpen, isActive, onSelectHandler, onBackHandler, backLabel, showCategory, badge, linkDataHook}) => {
+const SubMenu = ({children, title, isOpen, isActive, onSelectHandler, onBackHandler, backLabel, showCategory, badge, linkDataHook, clickEventType}) => {
   if (!isOpen) {
-
+    const clickEvent = {[clickEventType]: onSelectHandler};
     return (
-      <NavigationLink isActive={isActive} onClick={onSelectHandler} badge={badge} withArrow={!badge} data-hook={linkDataHook}>
+      <NavigationLink isActive={isActive} {...clickEvent} badge={badge} withArrow={!badge} data-hook={linkDataHook}>
         {title}
       </NavigationLink>
     );
@@ -21,7 +21,7 @@ const SubMenu = ({children, title, isOpen, isActive, onSelectHandler, onBackHand
     if (child.type === SideMenuDrill.Navigation) {
       return (
         <div className={styles.openSubMenu}>
-          <NavigationBackLink onBackHandler={onBackHandler}>{backLabel}</NavigationBackLink>
+          <NavigationBackLink clickEventType={clickEventType} onBackHandler={onBackHandler}>{backLabel}</NavigationBackLink>
           {showCategory && <NavigationCategory>{title}</NavigationCategory>}
           <Navigation>
             {child.props.children}
@@ -47,7 +47,8 @@ SubMenu.defaultProps = {
   onBackHandler: () => {},
   backLabel: 'Back',
   showCategory: true,
-  linkDataHook: 'menu-drill-sub-menu-link'
+  linkDataHook: 'menu-drill-sub-menu-link',
+  clickEventType: 'onClick'
 };
 
 SubMenu.propTypes = {
@@ -61,7 +62,8 @@ SubMenu.propTypes = {
   showCategory: PropTypes.bool,
   badge: PropTypes.node,
   linkDataHook: PropTypes.string,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  clickEventType: PropTypes.oneOf(['onClick', 'onMouseDown'])
 };
 
 export default SubMenu;
