@@ -14,7 +14,7 @@
 ```sh
 npm i wix-style-react
 # OR
-yarn wix-style-react
+yarn add wix-style-react
 ```
 
 * Use in your project:
