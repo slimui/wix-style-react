@@ -57,6 +57,8 @@ $image-container-offset: 30px;
   overflow: auto;
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .image-background {
@@ -94,11 +96,18 @@ $image-container-offset: 30px;
   width: 100%;
 }
 
-.content {
+.content-container {
   z-index: 1;
+  flex: 1;
+  width: 100%;
+  display: flex;
+}
+
+.content {
   position: relative;
-  margin: 0 auto;
   padding: 0 $page-side-padding;
+  margin: 0 auto;
+  flex: 1;
 }
 
 .content-placeholder {
